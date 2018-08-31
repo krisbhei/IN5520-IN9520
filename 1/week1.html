@@ -1,0 +1,300 @@
+<!--
+Automatically generated HTML file from DocOnce source
+(https://github.com/hplgit/doconce/)
+-->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="DocOnce: https://github.com/hplgit/doconce/" />
+<meta name="description" content="Proposed solutions in Matlab">
+
+<title>Proposed solutions in Matlab</title>
+
+<!-- Bootstrap style: bootswatch_yeti -->
+<link href="https://netdna.bootstrapcdn.com/bootswatch/3.1.1/yeti/bootstrap.min.css" rel="stylesheet">
+<!-- not necessary
+<link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+-->
+
+<style type="text/css">
+/* Let inline verbatim have the same color as the surroundings */
+code { color: inherit; background-color: transparent; }
+
+/* Add scrollbar to dropdown menus in bootstrap navigation bar */
+.dropdown-menu {
+   height: auto;
+   max-height: 400px;
+   overflow-x: hidden;
+}
+
+/* Adds an invisible element before each target to offset for the navigation
+   bar */
+.anchor::before {
+  content:"";
+  display:block;
+  height:45px;      /* fixed header height for style bootswatch_yeti */
+  margin:-45px 0 0; /* negative fixed header height */
+}
+
+body { font-size:16px; }
+</style>
+
+
+</head>
+
+<!-- tocinfo
+{'highest level': 4, 'sections': []}
+end of tocinfo -->
+
+<body>
+
+    
+<!-- Bootstrap navigation bar -->
+<div class="navbar navbar-default navbar-fixed-top">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="week1.html">Proposed solutions in Matlab</a>
+  </div>
+
+  <div class="navbar-collapse collapse navbar-responsive-collapse">
+    <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+</div> <!-- end of navigation bar -->
+
+<div class="container">
+
+<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p> <!-- add vertical space -->
+
+<!-- ------------------- main content ---------------------- -->
+
+<p>
+
+
+<center><h1>Proposed solutions in Matlab </h1></center>  <!-- document title -->
+
+<p>
+Here you can find the proposed solutions for the first exercise set, written in Matlab.
+
+<p>
+
+<!-- code=matlab (!bc mpro) typeset with pygments style "friendly" -->
+<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>close all <span style="color: #60a0b0; font-style: italic">% closes all figure windows </span>
+
+img1 = imread(<span style="color: #4070a0">&#39;football.jpg&#39;</span>);
+img3 = rgb2gray(img1);
+
+h1 = <span style="color: #007020">ones</span>(<span style="color: #40a070">5</span>,<span style="color: #40a070">5</span>) <span style="color: #666666">/</span> <span style="color: #40a070">25</span>;
+img4 = imfilter(img3,h1);
+
+figure, imagesc(img3), colormap gray, title(<span style="color: #4070a0">&#39;Original image&#39;</span>);
+figure, imagesc(img4), colormap gray, title(<span style="color: #4070a0">&#39;Filtered image&#39;</span>);
+
+<span style="color: #60a0b0; font-style: italic">%% Exercise 1 </span>
+
+<span style="color: #60a0b0; font-style: italic">% a)</span>
+[Nx, Ny] = <span style="color: #007020">size</span>(img3);
+img4_indexed = img4(<span style="color: #40a070">3</span>:(Nx<span style="color: #666666">-</span><span style="color: #40a070">2</span>),<span style="color: #40a070">3</span>:(Ny<span style="color: #666666">-</span><span style="color: #40a070">2</span>));
+
+figure, imagesc(img4_indexed), colormap gray, title(<span style="color: #4070a0">&#39;Borders removed, indexing technique&#39;</span>);
+
+<span style="color: #60a0b0; font-style: italic">% b)</span>
+img4_conv2 = conv2(double(img3),h1,<span style="color: #4070a0">&#39;valid&#39;</span>);
+img4_filter2 = filter2(h1,double(img3),<span style="color: #4070a0">&#39;valid&#39;</span>);
+
+figure, imagesc(img4_conv2), colormap gray, title(<span style="color: #4070a0">&#39;Borders removed, using valid in conv2&#39;</span>);
+figure, imagesc(img4_filter2), colormap gray, title(<span style="color: #4070a0">&#39;Borders removed, using valid in filter2&#39;</span>);
+
+<span style="color: #60a0b0; font-style: italic">% c)</span>
+img4_imfilter = imfilter(img3,h1,<span style="color: #4070a0">&#39;same&#39;</span>,<span style="color: #4070a0">&#39;symmetric&#39;</span>);
+
+figure, imagesc(img4_imfilter), colormap gray, title(<span style="color: #4070a0">&#39;Same-sized filtered image using imfilter&#39;</span>);
+
+<span style="color: #60a0b0; font-style: italic">%% Exercise 2</span>
+
+<span style="color: #60a0b0; font-style: italic">% see iimhist.m </span>
+
+hist_ = iimhist(img3);
+hist_matlab = imhist(img3);
+
+<span style="color: #60a0b0; font-style: italic">% See how iimhist performs compared to Matlab&#39;s imhist:</span>
+abs_err = <span style="color: #007020">abs</span>(hist_ <span style="color: #666666">-</span> hist_matlab);
+max(abs_err)
+
+bins = <span style="color: #40a070">1</span>:<span style="color: #40a070">256</span> ;
+
+figure()
+
+bar(bins, hist_, <span style="color: #4070a0">&#39;FaceAlpha&#39;</span>, <span style="color: #40a070">0.5</span>); <span style="color: #60a0b0; font-style: italic">% Facealpha is used to make the bars transparent. </span>
+hold on <span style="color: #60a0b0; font-style: italic">% Makes it possible to plot two plots on top of each other </span>
+bar(bins, hist_matlab, <span style="color: #4070a0">&#39;FaceAlpha&#39;</span>, <span style="color: #40a070">0.5</span>)
+
+title(<span style="color: #4070a0">&#39;Histograms&#39;</span>);
+legend(<span style="color: #4070a0">&#39;iimhist&#39;</span>,<span style="color: #4070a0">&#39;imhist&#39;</span>)
+
+<span style="color: #60a0b0; font-style: italic">%% Exercise 3</span>
+
+img2 = imread(<span style="color: #4070a0">&#39;coins.png&#39;</span>);
+
+<span style="color: #60a0b0; font-style: italic">% a)</span>
+thresholded1 = <span style="color: #007020">zeros</span>(<span style="color: #007020">size</span>(img2)); <span style="color: #60a0b0; font-style: italic">% Make a matrix of the same size as img2</span>
+thresholded1(img2 <span style="color: #666666">&gt;</span> <span style="color: #40a070">100</span>) = <span style="color: #40a070">1</span>;
+
+thresholded2 = <span style="color: #007020">zeros</span>(<span style="color: #007020">size</span>(img2)); <span style="color: #60a0b0; font-style: italic">% Make a matrix of the same size as img2</span>
+thresholded2(img2 <span style="color: #666666">&lt;</span> <span style="color: #40a070">100</span>) = <span style="color: #40a070">1</span>;
+
+thresholded3 = <span style="color: #007020">zeros</span>(<span style="color: #007020">size</span>(img2)); <span style="color: #60a0b0; font-style: italic">% Make a matrix of the same size as img2</span>
+thresholded3(img2 <span style="color: #666666">&gt;</span>= <span style="color: #40a070">120</span>) = <span style="color: #40a070">1</span>;
+
+thresholded4 = <span style="color: #007020">zeros</span>(<span style="color: #007020">size</span>(img2)); <span style="color: #60a0b0; font-style: italic">% Make a matrix of the same size as img2</span>
+thresholded4(img2 <span style="color: #666666">&lt;</span>= <span style="color: #40a070">120</span>) = <span style="color: #40a070">1</span>;
+
+<span style="color: #60a0b0; font-style: italic">% Make subplots of the thresholded images </span>
+figure()
+
+<span style="color: #60a0b0; font-style: italic">% The two first numbers represents the number of plots along the vertical</span>
+<span style="color: #60a0b0; font-style: italic">% axis and the horizontal axis, respectively. The last number indicates at</span>
+<span style="color: #60a0b0; font-style: italic">% which plot we are considering. </span>
+subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">1</span>) 
+imagesc(thresholded1)
+colormap gray
+title(<span style="color: #4070a0">&#39;Pixel values of img2 greater than 100&#39;</span>)
+
+subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>) 
+imagesc(thresholded2)
+colormap gray
+title(<span style="color: #4070a0">&#39;Pixel values of img2 less than 100&#39;</span>)
+
+subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">3</span>) 
+imagesc(thresholded3)
+colormap gray
+title(<span style="color: #4070a0">&#39;Pixel values of img2 greater or equal to 120&#39;</span>)
+
+subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">4</span>) 
+imagesc(thresholded4)
+colormap gray
+title(<span style="color: #4070a0">&#39;Pixel values of img2 less or equal to 120&#39;</span>)
+
+<span style="color: #60a0b0; font-style: italic">% b)</span>
+thr_otsu = graythresh(img2);
+
+img2_otsu = im2bw(img2, thr_otsu); <span style="color: #60a0b0; font-style: italic">% or imbinarize</span>
+
+figure, imagesc(img2_otsu), colormap gray, title(<span style="color: #4070a0">&#39;img2 thresholded using Otsu`s method&#39;</span>);
+
+<span style="color: #60a0b0; font-style: italic">% c)</span>
+
+figure()
+
+subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">1</span>) 
+imagesc(<span style="color: #007020">abs</span>(thresholded1<span style="color: #666666">-</span>img2_otsu))
+colormap gray
+title({<span style="color: #4070a0">&#39;Absolute difference between thresholded1 and image&#39;</span>,<span style="color: #4070a0">&#39;thresholded using Otsu`s method&#39;</span>})
+
+subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>) 
+imagesc(<span style="color: #007020">abs</span>(thresholded2<span style="color: #666666">-</span>img2_otsu))
+colormap gray
+title({<span style="color: #4070a0">&#39;Absolute difference between thresholded2 and image&#39;</span>,<span style="color: #4070a0">&#39;thresholded using Otsu`s method&#39;</span>})
+
+
+subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">3</span>) 
+imagesc(<span style="color: #007020">abs</span>(thresholded3<span style="color: #666666">-</span>img2_otsu))
+colormap gray
+title({<span style="color: #4070a0">&#39;Absolute difference between thresholded3 and image&#39;</span>,<span style="color: #4070a0">&#39;thresholded using Otsu`s method&#39;</span>})
+
+subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">4</span>) 
+imagesc(<span style="color: #007020">abs</span>(thresholded4<span style="color: #666666">-</span>img2_otsu))
+colormap gray
+title({<span style="color: #4070a0">&#39;Absolute difference between thresholded4 and image&#39;</span>,<span style="color: #4070a0">&#39;thresholded using Otsu`s method&#39;</span>})
+
+<span style="color: #60a0b0; font-style: italic">%% Exercise 4 </span>
+
+h2x = [<span style="color: #666666">-</span><span style="color: #40a070">1</span> <span style="color: #666666">-</span><span style="color: #40a070">2</span> <span style="color: #666666">-</span><span style="color: #40a070">1</span> ;  <span style="color: #40a070">0</span>  <span style="color: #40a070">0</span>  <span style="color: #40a070">0</span> ;  <span style="color: #40a070">1</span>  <span style="color: #40a070">2</span>  <span style="color: #40a070">1</span>];
+h2y = [<span style="color: #666666">-</span><span style="color: #40a070">1</span>  <span style="color: #40a070">0</span>  <span style="color: #40a070">1</span> ; <span style="color: #666666">-</span><span style="color: #40a070">2</span>  <span style="color: #40a070">0</span>  <span style="color: #40a070">2</span> ; <span style="color: #666666">-</span><span style="color: #40a070">1</span>  <span style="color: #40a070">0</span>  <span style="color: #40a070">1</span>];
+resX = conv2(double(img3), h2x); 
+resY = conv2(double(img3), h2y);
+resXY = <span style="color: #007020">sqrt</span>(resX<span style="color: #666666">.^</span><span style="color: #40a070">2</span> <span style="color: #666666">+</span> resY<span style="color: #666666">.^</span><span style="color: #40a070">2</span>);
+
+<span style="color: #60a0b0; font-style: italic">% Trick in matlab; use mat2gray to normalize the matrix between 0 and 1.</span>
+<span style="color: #60a0b0; font-style: italic">% Multiply then the matrix with 255. </span>
+resXY_norm = mat2gray(resXY)<span style="color: #666666">.*</span><span style="color: #40a070">255</span>;
+
+<span style="color: #60a0b0; font-style: italic">% See if the matrix has been correctly normalized:</span>
+max(resXY_norm(:)) <span style="color: #60a0b0; font-style: italic">% Gives 255</span>
+min(resXY_norm(:)) <span style="color: #60a0b0; font-style: italic">% Gives 0</span>
+
+<span style="color: #60a0b0; font-style: italic">% Threshold the image </span>
+T = <span style="color: #40a070">100</span>;
+thresholded = <span style="color: #007020">zeros</span>(<span style="color: #007020">size</span>(resXY));
+thresholded(resXY_norm <span style="color: #666666">&gt;</span> T) = <span style="color: #40a070">1</span>;
+
+figure()
+imagesc(thresholded)
+colormap gray
+title(<span style="color: #4070a0">&#39;Normalized img2 thresholded with T = 100&#39;</span>)
+
+<span style="color: #60a0b0; font-style: italic">% One could also do the normalization &#39;manually&#39;.</span>
+<span style="color: #60a0b0; font-style: italic">% The normalization could be seen as a linear transform of the pixel</span>
+<span style="color: #60a0b0; font-style: italic">% intensities: normalized_img = a*img + b </span>
+<span style="color: #60a0b0; font-style: italic">% To determine the coefficients a and b, the following equations can</span>
+<span style="color: #60a0b0; font-style: italic">% be solved:</span>
+<span style="color: #60a0b0; font-style: italic">%</span>
+<span style="color: #60a0b0; font-style: italic">% 0 = a*min(img(:)) + b</span>
+<span style="color: #60a0b0; font-style: italic">% 255 = a*max(img(:)) + b </span>
+<span style="color: #60a0b0; font-style: italic">%</span>
+<span style="color: #60a0b0; font-style: italic">% which yields</span>
+<span style="color: #60a0b0; font-style: italic">% a = 255/( max(img(:)) - min(img(:)) )</span>
+<span style="color: #60a0b0; font-style: italic">% b = -a*min(img(:))</span>
+<span style="color: #60a0b0; font-style: italic">%   = -( 255 * min(img(:)) )/( max(img(:)) - min(img(:)) )</span>
+<span style="color: #60a0b0; font-style: italic">%</span>
+<span style="color: #60a0b0; font-style: italic">% and gives the following expression for the normalization </span>
+<span style="color: #60a0b0; font-style: italic">%</span>
+<span style="color: #60a0b0; font-style: italic">% normalized_img = 255/( max(img(:)) - min(img(:)) )*( img -  min(img(:)) )</span>
+
+resXY_norm2 = <span style="color: #40a070">255</span><span style="color: #666666">/</span>( max(resXY(:)) <span style="color: #666666">-</span> min(resXY(:)) )<span style="color: #666666">*</span>( resXY <span style="color: #666666">-</span>  min(resXY(:)) );
+
+<span style="color: #60a0b0; font-style: italic">% Find the max error between the &#39;manual&#39; normalization and normalization</span>
+<span style="color: #60a0b0; font-style: italic">% using mat2gray</span>
+
+diff = <span style="color: #007020">abs</span>(resXY_norm <span style="color: #666666">-</span> resXY_norm2);
+max(diff(:)) <span style="color: #60a0b0; font-style: italic">% The maximum error is of order 10^{-14}, which practically is zero to numeric precision.</span>
+</pre></div>
+<p>
+The code is available <a href="https://github.com/krisbhei/IN5520-IN19520/1/proposed_solutions.m" target="_self">here</a>
+
+<p>
+
+<!-- ------------------- end of main content --------------- -->
+
+</div>  <!-- end container -->
+<!-- include javascript, jQuery *first* -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+<!-- Bootstrap footer
+<footer>
+<a href="http://..."><img width="250" align=right src="http://..."></a>
+</footer>
+-->
+
+
+<center style="font-size:80%">
+<!-- copyright -->  Made with <a href="https://github.com/hplgit/doconce">DocOnce</a>
+</center>
+
+
+</body>
+</html>
+    
+
