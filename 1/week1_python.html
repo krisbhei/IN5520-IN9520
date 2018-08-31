@@ -1,0 +1,658 @@
+<!--
+Automatically generated HTML file from DocOnce source
+(https://github.com/hplgit/doconce/)
+-->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="DocOnce: https://github.com/hplgit/doconce/" />
+<meta name="description" content="Proposed solutions to the exercises in the first exercise set in Python">
+
+<title>Proposed solutions to the exercises in the first exercise set in Python</title>
+
+<!-- Bootstrap style: bootswatch_yeti -->
+<link href="https://netdna.bootstrapcdn.com/bootswatch/3.1.1/yeti/bootstrap.min.css" rel="stylesheet">
+<!-- not necessary
+<link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+-->
+
+<style type="text/css">
+/* Let inline verbatim have the same color as the surroundings */
+code { color: inherit; background-color: transparent; }
+
+/* Add scrollbar to dropdown menus in bootstrap navigation bar */
+.dropdown-menu {
+   height: auto;
+   max-height: 400px;
+   overflow-x: hidden;
+}
+
+/* Adds an invisible element before each target to offset for the navigation
+   bar */
+.anchor::before {
+  content:"";
+  display:block;
+  height:45px;      /* fixed header height for style bootswatch_yeti */
+  margin:-45px 0 0; /* negative fixed header height */
+}
+
+body { font-size:16px; }
+</style>
+
+
+</head>
+
+<!-- tocinfo
+{'highest level': 1,
+ 'sections': [('Translation of the exercise set from Matlab to Python',
+               1,
+               None,
+               '___sec0'),
+              ('Suggested solution', 1, None, '___sec1')]}
+end of tocinfo -->
+
+<body>
+
+    
+<!-- Bootstrap navigation bar -->
+<div class="navbar navbar-default navbar-fixed-top">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="week1_python.html">Proposed solutions to the exercises in the first exercise set in Python</a>
+  </div>
+
+  <div class="navbar-collapse collapse navbar-responsive-collapse">
+    <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+     <!-- navigation toc: --> <li><a href="#___sec0" style="font-size: 14px; padding: 4px 15px;">Translation of the exercise set from Matlab to Python</a></li>
+     <!-- navigation toc: --> <li><a href="#___sec1" style="font-size: 14px; padding: 4px 15px;">Suggested solution</a></li>
+
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+</div> <!-- end of navigation bar -->
+
+<div class="container">
+
+<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p> <!-- add vertical space -->
+
+<!-- ------------------- main content ---------------------- -->
+
+<p>
+
+
+<div class="jumbotron">
+<center><h1>Proposed solutions to the exercises in the first exercise set in Python</h1></center>  <!-- document title -->
+
+<p>
+Here you can find the translated exercise set from Matlab to Python, along with some suggested solutions. Note that the functions availible in Python depends on which packages you want to use. This means that functions like imfilter, filter2 and conv2 as described in the set for Matlab does not necesarily hold for the package you have chosen to use in Python. However, what is important regarding Python , is to know which packages have the desired implementations. There might be implementations in some packages written in a more desirable manner, and knwoing which to choose from can save one a lot of time. In the suggestions, you might see packages like scipy, scikit-image and openCV being used.
+
+<p>
+<!-- potential-jumbotron-button -->
+</div> <!-- end jumbotron -->
+
+<!-- !split -->
+
+<h1 id="___sec0" class="anchor">Translation of the exercise set from Matlab to Python </h1>
+
+<p>
+In Matlab, there exists some test images by default, e. g. football.jpg and coins.png. Unfortunately, these test images does not exist in the OpenCV package. To be able to load images using the proposed translatation, two images with the name image1.jpg and image2.jpg must be in the same folder as the downloaded program.
+
+<p>
+
+<!-- code=python (!bc pypro) typeset with pygments style "friendly" -->
+<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span><span style="color: #007020; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">numpy</span> <span style="color: #007020; font-weight: bold">as</span> <span style="color: #0e84b5; font-weight: bold">np</span> <span style="color: #60a0b0; font-style: italic"># For numeric computing, setting up matrices and performing computations at them</span>
+<span style="color: #007020; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">matplotlib.pyplot</span> <span style="color: #007020; font-weight: bold">as</span> <span style="color: #0e84b5; font-weight: bold">plt</span> <span style="color: #60a0b0; font-style: italic"># For plotting</span>
+
+<span style="color: #60a0b0; font-style: italic"># Originally written by Ole-MariusHoel Rindal for image analysis in 2015.</span>
+<span style="color: #60a0b0; font-style: italic"># Translated into Python by Kristine B. Hein for the same course held in 2018.</span>
+
+
+<span style="color: #60a0b0; font-style: italic"># The matrix | 1 0 0 |</span>
+<span style="color: #60a0b0; font-style: italic">#            | 0 1 0 |</span>
+<span style="color: #60a0b0; font-style: italic">#            | 0 0 1 |</span>
+<span style="color: #60a0b0; font-style: italic"># may be created like this (note that the backslash is not necessary,</span>
+<span style="color: #60a0b0; font-style: italic"># but is used such that a newline is allowed in the script for readability):</span>
+someMatrix <span style="color: #666666">=</span> np<span style="color: #666666">.</span>array([[<span style="color: #40a070">1</span>,<span style="color: #40a070">0</span>,<span style="color: #40a070">0</span>],\
+                       [<span style="color: #40a070">0</span>,<span style="color: #40a070">1</span>,<span style="color: #40a070">0</span>],\
+                       [<span style="color: #40a070">0</span>,<span style="color: #40a070">0</span>,<span style="color: #40a070">1</span>]])
+<span style="color: #60a0b0; font-style: italic"># Actually, a matrix in Python is represented as a list of lists.</span>
+<span style="color: #60a0b0; font-style: italic"># To be able to perform matrix operatons from Numpy between matrices, lists that are</span>
+<span style="color: #60a0b0; font-style: italic"># converted into numpy arrays must be used.</span>
+
+<span style="color: #60a0b0; font-style: italic"># e.g. [ [row1] , [row2] , ... , [rowM] ], where a row can be defined as</span>
+<span style="color: #60a0b0; font-style: italic"># [number1, number2, ..., numberN]</span>
+
+<span style="color: #60a0b0; font-style: italic"># Numpy comes built-in with function for many common matrix operations,</span>
+<span style="color: #60a0b0; font-style: italic"># for the case above we could have typed:</span>
+someMatrix <span style="color: #666666">=</span> np<span style="color: #666666">.</span>diag([<span style="color: #40a070">1</span>,<span style="color: #40a070">1</span>,<span style="color: #40a070">1</span>])
+
+<span style="color: #60a0b0; font-style: italic"># If you wonder how a function/operator works in Numpy, the documentation can be</span>
+<span style="color: #60a0b0; font-style: italic"># found here (along with documentation for scipy):</span>
+<span style="color: #60a0b0; font-style: italic"># https://docs.scipy.org/doc/</span>
+
+<span style="color: #60a0b0; font-style: italic"># To constract a matrix, memory must be allocated. It is not possible to</span>
+<span style="color: #60a0b0; font-style: italic"># dynamic allocate memory to a matrix in Python.</span>
+
+<span style="color: #60a0b0; font-style: italic"># E.g. allocate memory for 100 x 100 matrix and fill it with ones.</span>
+<span style="color: #60a0b0; font-style: italic"># Note that most of the dimensions of the matrices in Numpy</span>
+<span style="color: #60a0b0; font-style: italic"># are defined as tuples/lists: (number-of-rows, number-of-columns)</span>
+big_1 <span style="color: #666666">=</span> np<span style="color: #666666">.</span>ones((<span style="color: #40a070">100</span>,<span style="color: #40a070">100</span>))
+
+<span style="color: #60a0b0; font-style: italic"># Or, allocate a 50 x 40 x 3 matrix and fill it with zeros:</span>
+big_0 <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros((<span style="color: #40a070">50</span>,<span style="color: #40a070">40</span>,<span style="color: #40a070">3</span>))
+
+<span style="color: #60a0b0; font-style: italic"># An 1D array can be created using the &#39;&lt;from&gt;:&lt;to&gt;:&lt;step&gt;&#39; syntax using np.arange.</span>
+<span style="color: #60a0b0; font-style: italic"># Note that the end-value of the array will end at the integer closest to the value &lt;to&gt;,</span>
+<span style="color: #60a0b0; font-style: italic"># but never be equal to &lt;to&gt; or higher than &lt;to&gt;.</span>
+steg1 <span style="color: #666666">=</span> np<span style="color: #666666">.</span>arange(<span style="color: #40a070">0</span>,<span style="color: #40a070">50</span>,<span style="color: #40a070">2</span>)
+
+<span style="color: #60a0b0; font-style: italic"># The &lt;step&gt; is optional, and so is the &lt;from&gt;.</span>
+<span style="color: #60a0b0; font-style: italic"># If omitted the step defaults to 1 and the from value defaults to zero.</span>
+steg2 <span style="color: #666666">=</span> np<span style="color: #666666">.</span>arange(<span style="color: #40a070">50</span>)
+
+<span style="color: #60a0b0; font-style: italic"># The standard plotting function is PLOT, e.g.:</span>
+plt<span style="color: #666666">.</span>plot(steg1)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&#39;Demonstration of plot()&#39;</span>);
+<span style="color: #60a0b0; font-style: italic"># To show the plot, remeber to use plt.show()!</span>
+<span style="color: #60a0b0; font-style: italic">#plt.show()</span>
+
+<span style="color: #60a0b0; font-style: italic"># Extracting a value, or a series of values, from a matrix is easily</span>
+<span style="color: #60a0b0; font-style: italic"># achieved like this:</span>
+mat <span style="color: #666666">=</span> np<span style="color: #666666">.</span>array([[<span style="color: #40a070">1</span>,<span style="color: #40a070">7</span>,<span style="color: #40a070">4</span>] , [<span style="color: #40a070">3</span>,<span style="color: #40a070">4</span>,<span style="color: #40a070">5</span>]])
+<span style="color: #007020; font-weight: bold">print</span>(mat[<span style="color: #40a070">1</span>,<span style="color: #40a070">0</span>]) <span style="color: #60a0b0; font-style: italic"># retrives the &#39;3&#39;. NOTE: The first index is 0 in Python!</span>
+<span style="color: #007020; font-weight: bold">print</span>(mat[<span style="color: #40a070">1</span>][<span style="color: #40a070">0</span>]) <span style="color: #60a0b0; font-style: italic"># An altenative syntax to retrieve the same matrix element as above.</span>
+
+<span style="color: #60a0b0; font-style: italic"># A range of elements may retrieved using the &lt;from&gt;:&lt;to&gt; syntax, i.e slicing:</span>
+<span style="color: #007020; font-weight: bold">print</span>(mat[<span style="color: #40a070">0</span>:<span style="color: #40a070">2</span>,<span style="color: #40a070">0</span>])     <span style="color: #60a0b0; font-style: italic"># First column</span>
+<span style="color: #007020; font-weight: bold">print</span>(mat[<span style="color: #40a070">0</span>:<span style="color: #666666">-</span><span style="color: #40a070">1</span>,<span style="color: #40a070">0</span>])   <span style="color: #60a0b0; font-style: italic"># The same column where -1 means the last element</span>
+<span style="color: #007020; font-weight: bold">print</span>(mat[:,<span style="color: #40a070">0</span>])       <span style="color: #60a0b0; font-style: italic"># The same, : is here &#39;all rows&#39;</span>
+
+<span style="color: #60a0b0; font-style: italic"># We can use the same syntax to set a range of elements:</span>
+mat[<span style="color: #40a070">0</span>:<span style="color: #40a070">2</span>,<span style="color: #40a070">0</span>:<span style="color: #40a070">2</span>] <span style="color: #666666">=</span> <span style="color: #40a070">0</span>
+
+<span style="color: #60a0b0; font-style: italic"># Note that a matrix can be stored in various formats, e.g. UINT8, INT8 or</span>
+<span style="color: #60a0b0; font-style: italic"># DOUBLE. They all have their conversion functions, see e.g. &#39;help uint8&#39;.</span>
+<span style="color: #60a0b0; font-style: italic"># If your result looks fishy, and you have a hard time figuring out why,</span>
+<span style="color: #60a0b0; font-style: italic"># a type conversion (of lack of one) may be the reason!</span>
+
+<span style="color: #60a0b0; font-style: italic">## 2. Matrix operations</span>
+<span style="color: #60a0b0; font-style: italic"># Here we&#39;ll demonstrate how some simple matrix operations is done in</span>
+<span style="color: #60a0b0; font-style: italic"># MATLAB</span>
+
+<span style="color: #60a0b0; font-style: italic"># We&#39;ll start</span>
+mat1 <span style="color: #666666">=</span> np<span style="color: #666666">.</span>array([[<span style="color: #40a070">2</span>,<span style="color: #40a070">3</span>], [<span style="color: #40a070">5</span>,<span style="color: #40a070">7</span>]]);
+mat2 <span style="color: #666666">=</span> np<span style="color: #666666">.</span>array([[<span style="color: #40a070">4</span>,<span style="color: #40a070">5</span>], [<span style="color: #40a070">1</span>,<span style="color: #40a070">9</span>]]);
+
+<span style="color: #60a0b0; font-style: italic"># Elementwise addition and subtraction.</span>
+<span style="color: #007020; font-weight: bold">print</span>(mat1 <span style="color: #666666">+</span> mat2)
+<span style="color: #007020; font-weight: bold">print</span>(mat1 <span style="color: #666666">-</span> mat2)
+
+<span style="color: #60a0b0; font-style: italic"># Transpose.</span>
+<span style="color: #007020; font-weight: bold">print</span>(np<span style="color: #666666">.</span>transpose(mat1))
+
+<span style="color: #60a0b0; font-style: italic"># Complex conjugate transpose (same as transpose when the matrix is real).</span>
+<span style="color: #007020; font-weight: bold">print</span>(np<span style="color: #666666">.</span>conjugate(mat1))
+
+<span style="color: #60a0b0; font-style: italic"># But notice the difference for a complex matrix, note at 1j</span>
+<span style="color: #60a0b0; font-style: italic"># is the imaginary unit, i.e 1j = sqrt(-1).</span>
+complexMatrix <span style="color: #666666">=</span> np<span style="color: #666666">.</span>array([[<span style="color: #40a070">0</span>,<span style="color: #40a070">1j</span><span style="color: #666666">-</span><span style="color: #40a070">2</span>], [<span style="color: #40a070">1j</span><span style="color: #666666">+</span><span style="color: #40a070">2</span>,<span style="color: #40a070">0</span>]])
+
+<span style="color: #60a0b0; font-style: italic"># Transpose for complex, see the function transpose</span>
+<span style="color: #007020; font-weight: bold">print</span>(np<span style="color: #666666">.</span>transpose(complexMatrix))
+
+<span style="color: #60a0b0; font-style: italic"># Complex conjugate transpose, see the function ctranspose</span>
+<span style="color: #007020; font-weight: bold">print</span>(np<span style="color: #666666">.</span>conjugate(complexMatrix))
+
+<span style="color: #60a0b0; font-style: italic"># Multiplication, division and power.</span>
+<span style="color: #007020; font-weight: bold">print</span>(mat1<span style="color: #666666">.</span>dot(mat2)) <span style="color: #60a0b0; font-style: italic"># The * denotes elementwise product, the Hadamard product</span>
+<span style="color: #007020; font-weight: bold">print</span>(np<span style="color: #666666">.</span>divide(mat1,mat2))
+<span style="color: #007020; font-weight: bold">print</span>(np<span style="color: #666666">.</span>linalg<span style="color: #666666">.</span>matrix_power(mat1,<span style="color: #40a070">2</span>))
+
+<span style="color: #60a0b0; font-style: italic"># Elementwise multiplication, division and power</span>
+<span style="color: #007020; font-weight: bold">print</span>(mat1 <span style="color: #666666">*</span> mat2)
+<span style="color: #007020; font-weight: bold">print</span>(mat1 <span style="color: #666666">/</span> mat2)
+<span style="color: #007020; font-weight: bold">print</span>(np<span style="color: #666666">.</span>power(mat1,mat2))
+
+<span style="color: #60a0b0; font-style: italic">## 3. Control structures</span>
+
+<span style="color: #60a0b0; font-style: italic"># While and for loops.</span>
+<span style="color: #60a0b0; font-style: italic"># Can often be used instead of matrix operations, but tend to lead to a</span>
+<span style="color: #60a0b0; font-style: italic"># slightly inferior perfomance.</span>
+<span style="color: #60a0b0; font-style: italic">#</span>
+<span style="color: #60a0b0; font-style: italic"># The reason for introducing performance-tips already is because we will be</span>
+<span style="color: #60a0b0; font-style: italic"># storing images as matrices, and these tend to be large. If we also</span>
+<span style="color: #60a0b0; font-style: italic"># consider that the algorithms we use are computationally intensive,</span>
+<span style="color: #60a0b0; font-style: italic"># writing somewhat optimised code is often worth the extra effort.</span>
+
+
+<span style="color: #60a0b0; font-style: italic"># E.g. can this simple loop:</span>
+A <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros(<span style="color: #40a070">100</span>)
+<span style="color: #007020; font-weight: bold">for</span> i <span style="color: #007020; font-weight: bold">in</span> <span style="color: #007020">range</span>(<span style="color: #40a070">100</span>):
+    A[i] <span style="color: #666666">=</span> <span style="color: #40a070">2</span>
+
+<span style="color: #60a0b0; font-style: italic"># be replaced by a single and more efficient command:</span>
+A <span style="color: #666666">=</span> np<span style="color: #666666">.</span>ones(<span style="color: #40a070">100</span>) <span style="color: #666666">*</span> <span style="color: #40a070">2</span>
+
+stor_1 <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros((<span style="color: #40a070">100</span>,<span style="color: #40a070">100</span>))
+<span style="color: #60a0b0; font-style: italic"># And:</span>
+<span style="color: #007020; font-weight: bold">for</span> i <span style="color: #007020; font-weight: bold">in</span> <span style="color: #007020">range</span>(<span style="color: #40a070">100</span>):
+    <span style="color: #007020; font-weight: bold">for</span> j <span style="color: #007020; font-weight: bold">in</span> <span style="color: #007020">range</span>(<span style="color: #40a070">100</span>):
+        stor_1[i,j] <span style="color: #666666">=</span> i<span style="color: #666666">^</span><span style="color: #40a070">2</span>
+
+<span style="color: #60a0b0; font-style: italic"># could be constructed by:</span>
+big_1_temp <span style="color: #666666">=</span> np<span style="color: #666666">.</span>tile((np<span style="color: #666666">.</span>arange(<span style="color: #40a070">100</span>)<span style="color: #666666">**</span><span style="color: #40a070">2</span>)<span style="color: #666666">.</span>reshape(<span style="color: #666666">-</span><span style="color: #40a070">1</span>,<span style="color: #40a070">1</span>), (<span style="color: #40a070">1</span>,<span style="color: #40a070">100</span>))
+<span style="color: #60a0b0; font-style: italic"># Note that .reshape(-1,1) makes the 1D array from arange into a column vector.</span>
+<span style="color: #60a0b0; font-style: italic"># The -1 is a flag to tell that &#39;any number&#39; of rows is okay, as long as the resulting vector has one column.</span>
+<span style="color: #60a0b0; font-style: italic"># The final vector has the same number of elements than before the rehaping.</span>
+
+
+<span style="color: #60a0b0; font-style: italic"># Note:</span>
+<span style="color: #60a0b0; font-style: italic"># If you are not used to &#39;doing everything with vectors&#39;, you&#39;ll likely</span>
+<span style="color: #60a0b0; font-style: italic"># want to use loops far more often than you need to. When you get the hang</span>
+<span style="color: #60a0b0; font-style: italic"># of it, typing vector-code is faster and often less error-prone than the</span>
+<span style="color: #60a0b0; font-style: italic"># loop-equivalents, but loops offer better flexibility.</span>
+
+<span style="color: #60a0b0; font-style: italic"># As always, add lots of COMMENTS, especially for complex one-liners!</span>
+
+<span style="color: #60a0b0; font-style: italic"># Logical structures: if-elseif-else. Which number is displayed?</span>
+<span style="color: #007020; font-weight: bold">if</span> <span style="color: #666666">-</span><span style="color: #40a070">1</span>:
+    <span style="color: #007020; font-weight: bold">print</span>(<span style="color: #40a070">1</span>)
+<span style="color: #007020; font-weight: bold">elif</span> <span style="color: #666666">-</span><span style="color: #40a070">2</span>:
+    <span style="color: #007020; font-weight: bold">print</span>(<span style="color: #40a070">2</span>)
+<span style="color: #007020; font-weight: bold">else</span>:
+    <span style="color: #007020; font-weight: bold">print</span>(<span style="color: #40a070">3</span>)
+
+<span style="color: #60a0b0; font-style: italic"># A very handy method, is to use boolean matrices.</span>
+
+<span style="color: #60a0b0; font-style: italic"># Example: Find elements which are equal to 4.</span>
+M <span style="color: #666666">=</span> np<span style="color: #666666">.</span>array([[<span style="color: #40a070">1</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">3</span>],\
+              [<span style="color: #40a070">4</span>,<span style="color: #40a070">4</span>,<span style="color: #40a070">5</span>],\
+              [<span style="color: #40a070">0</span>,<span style="color: #40a070">0</span>,<span style="color: #40a070">2</span>]])
+<span style="color: #007020; font-weight: bold">print</span>(M)
+
+M_bool <span style="color: #666666">=</span> M <span style="color: #666666">==</span> <span style="color: #40a070">4</span>            <span style="color: #60a0b0; font-style: italic"># a boolean matrix</span>
+<span style="color: #007020; font-weight: bold">print</span>(M_bool)
+
+M[M <span style="color: #666666">==</span> <span style="color: #40a070">4</span>] <span style="color: #666666">=</span> <span style="color: #40a070">3</span>          <span style="color: #60a0b0; font-style: italic"># change them to 3</span>
+<span style="color: #007020; font-weight: bold">print</span>(M)
+
+M[M_bool] <span style="color: #666666">=</span> <span style="color: #40a070">4</span>               <span style="color: #60a0b0; font-style: italic"># and back to 4</span>
+<span style="color: #007020; font-weight: bold">print</span>(M)
+
+<span style="color: #60a0b0; font-style: italic"># 5. Images</span>
+<span style="color: #60a0b0; font-style: italic">#Now, we&#39;ll finally look at some images, as most of our programs will have to deal with images.</span>
+
+<span style="color: #60a0b0; font-style: italic"># Many packages for image analysis, computer vision etc. exists.</span>
+<span style="color: #60a0b0; font-style: italic"># Some of the packages that could be used, are openCV for Python or scikit-image.</span>
+<span style="color: #60a0b0; font-style: italic"># Especially openCV has a alot of functions used in image analysis, with many of the functions</span>
+<span style="color: #60a0b0; font-style: italic"># that will be discussed throughout this course implemented.</span>
+<span style="color: #007020; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">cv2</span> <span style="color: #60a0b0; font-style: italic"># Import openCV.</span>
+
+<span style="color: #60a0b0; font-style: italic"># Open a couple of images.</span>
+img1 <span style="color: #666666">=</span> cv2<span style="color: #666666">.</span>imread(<span style="color: #4070a0">&#39;image1.jpg&#39;</span>)
+img2 <span style="color: #666666">=</span> cv2<span style="color: #666666">.</span>imread(<span style="color: #4070a0">&#39;image2.jpg&#39;</span>)
+
+<span style="color: #60a0b0; font-style: italic"># If we choose to work with images having color, i.e having three channels,</span>
+<span style="color: #60a0b0; font-style: italic"># have in mind that the images read are in BGR, and not RGB!</span>
+<span style="color: #60a0b0; font-style: italic"># Plotting with matplotlib will therefore give images having different colors than usual.</span>
+<span style="color: #60a0b0; font-style: italic"># To overcome this, the image can be converted into RGB before plotting.</span>
+<span style="color: #60a0b0; font-style: italic"># If any processing of the image on each of the channels are performed, especially</span>
+<span style="color: #60a0b0; font-style: italic"># by using openCV&#39;s implementation, be careful to do the conversion after the processing, but before the plotting.</span>
+
+img1_rgb <span style="color: #666666">=</span> cv2<span style="color: #666666">.</span>cvtColor(img1, cv2<span style="color: #666666">.</span>COLOR_BGR2RGB)
+img2_rgb <span style="color: #666666">=</span> cv2<span style="color: #666666">.</span>cvtColor(img2, cv2<span style="color: #666666">.</span>COLOR_BGR2RGB)
+
+<span style="color: #60a0b0; font-style: italic"># Draw the first image (plt.show is used at the bottom to avoid hindrering other windows to show up)</span>
+plt<span style="color: #666666">.</span>figure()
+plt<span style="color: #666666">.</span>imshow(img1)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&#39;The first image in BGR&#39;</span>)
+
+plt<span style="color: #666666">.</span>imshow(img1_rgb)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&#39;The first image in RGB&#39;</span>)
+
+<span style="color: #60a0b0; font-style: italic"># Display the second image in a new figure.</span>
+plt<span style="color: #666666">.</span>figure()
+plt<span style="color: #666666">.</span>imshow(img2_rgb)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&#39;The second image in RGB&#39;</span>)
+
+<span style="color: #60a0b0; font-style: italic"># Histogram of the image channel 0, that being the layer of the image</span>
+<span style="color: #60a0b0; font-style: italic"># that described how much blue it is in the image</span>
+H <span style="color: #666666">=</span> cv2<span style="color: #666666">.</span>calcHist([img2],[<span style="color: #40a070">0</span>],<span style="color: #007020">None</span>,[<span style="color: #40a070">256</span>],[<span style="color: #40a070">0</span>,<span style="color: #40a070">256</span>])
+
+plt<span style="color: #666666">.</span>figure()
+plt<span style="color: #666666">.</span>plot(np<span style="color: #666666">.</span>arange(<span style="color: #40a070">256</span>),H<span style="color: #666666">.</span>ravel())
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&#39;The histogram for the second image at the blue channel&#39;</span>);
+
+<span style="color: #60a0b0; font-style: italic"># Converting a colour image with 3 colour channels to a greyscale image</span>
+img3 <span style="color: #666666">=</span> cv2<span style="color: #666666">.</span>imread(<span style="color: #4070a0">&#39;image1.jpg&#39;</span>, <span style="color: #40a070">0</span>)<span style="color: #666666">.</span>astype(<span style="color: #4070a0">&#39;float&#39;</span>) <span style="color: #60a0b0; font-style: italic"># 0 is used to indicate a gray-level image</span>
+plt<span style="color: #666666">.</span>figure()
+plt<span style="color: #666666">.</span>imshow(img3,cmap<span style="color: #666666">=</span><span style="color: #4070a0">&#39;gray&#39;</span>)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&#39;Grayscale image of image 1&#39;</span>);
+
+<span style="color: #60a0b0; font-style: italic">## 6. Some basic filtering in the image domain.</span>
+<span style="color: #60a0b0; font-style: italic"># Now we have jumped into the curriculum of INF2310.</span>
+<span style="color: #60a0b0; font-style: italic"># Don&#39;t hesitate to ask or read up on last courses materials</span>
+<span style="color: #60a0b0; font-style: italic"># available at http://www.uio.no/studier/emner/matnat/ifi/INF2310/v17/</span>
+<span style="color: #60a0b0; font-style: italic"># under &#39;Undervisningplan&#39;</span>
+
+<span style="color: #60a0b0; font-style: italic"># 2D correlation: FILTER2</span>
+<span style="color: #60a0b0; font-style: italic"># 2D convolution: CONV2</span>
+<span style="color: #60a0b0; font-style: italic"># With IMFILTER you can choose either 2D correlation (default) and 2D</span>
+<span style="color: #60a0b0; font-style: italic"># convolution, and it also has some boundary options.</span>
+
+<span style="color: #60a0b0; font-style: italic"># Filter IMG3 using a 5x5 mean filter.</span>
+h1 <span style="color: #666666">=</span> np<span style="color: #666666">.</span>ones((<span style="color: #40a070">5</span>,<span style="color: #40a070">5</span>)) <span style="color: #666666">/</span> <span style="color: #40a070">25</span>
+
+img4 <span style="color: #666666">=</span> cv2<span style="color: #666666">.</span>filter2D(img3,<span style="color: #666666">-</span><span style="color: #40a070">1</span>,h1) <span style="color: #60a0b0; font-style: italic"># symmetric filter =&gt; correlation = convolution</span>
+
+plt<span style="color: #666666">.</span>figure()
+plt<span style="color: #666666">.</span>imshow(img3,cmap<span style="color: #666666">=</span><span style="color: #4070a0">&#39;gray&#39;</span>)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&#39;Original image&#39;</span>);
+
+plt<span style="color: #666666">.</span>figure()
+plt<span style="color: #666666">.</span>imshow(img4,cmap<span style="color: #666666">=</span><span style="color: #4070a0">&#39;gray&#39;</span>)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&#39;Filtered image&#39;</span>)
+
+<span style="color: #60a0b0; font-style: italic"># Find the gradient magnitude of IMG3.</span>
+h2x <span style="color: #666666">=</span> np<span style="color: #666666">.</span>array([[<span style="color: #666666">-</span><span style="color: #40a070">1</span>,<span style="color: #666666">-</span><span style="color: #40a070">2</span>,<span style="color: #666666">-</span><span style="color: #40a070">1</span>],\
+                [<span style="color: #40a070">0</span>,<span style="color: #40a070">0</span>,<span style="color: #40a070">0</span>],\
+                [<span style="color: #40a070">1</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">1</span>]])
+
+h2y <span style="color: #666666">=</span> np<span style="color: #666666">.</span>array([[<span style="color: #666666">-</span><span style="color: #40a070">1</span>,<span style="color: #40a070">0</span>,<span style="color: #40a070">1</span>],\
+                [<span style="color: #666666">-</span><span style="color: #40a070">2</span>,<span style="color: #40a070">0</span>,<span style="color: #40a070">2</span>],\
+                [<span style="color: #666666">-</span><span style="color: #40a070">1</span>,<span style="color: #40a070">0</span>,<span style="color: #40a070">1</span>]])
+
+resX <span style="color: #666666">=</span> cv2<span style="color: #666666">.</span>filter2D(img3,<span style="color: #666666">-</span><span style="color: #40a070">1</span>, h2x)
+resY <span style="color: #666666">=</span> cv2<span style="color: #666666">.</span>filter2D(img3,<span style="color: #666666">-</span><span style="color: #40a070">1</span>, h2y)
+resXY <span style="color: #666666">=</span> np<span style="color: #666666">.</span>sqrt(resX<span style="color: #666666">**</span><span style="color: #40a070">2</span> <span style="color: #666666">+</span> resY<span style="color: #666666">**</span><span style="color: #40a070">2</span>)
+
+<span style="color: #60a0b0; font-style: italic"># Display the gradient magnitude:</span>
+plt<span style="color: #666666">.</span>figure()
+plt<span style="color: #666666">.</span>imshow(resXY,cmap<span style="color: #666666">=</span><span style="color: #4070a0">&#39;gray&#39;</span>)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&#39;Gradient magnitude&#39;</span>)
+
+<span style="color: #60a0b0; font-style: italic"># Show the images</span>
+plt<span style="color: #666666">.</span>show()
+
+
+<span style="color: #60a0b0; font-style: italic">################</span>
+<span style="color: #60a0b0; font-style: italic">## EXERCISE 1</span>
+<span style="color: #60a0b0; font-style: italic">################</span>
+
+<span style="color: #60a0b0; font-style: italic"># Above, we loaded the image &#39;image1.jpg&#39;, converted it to a greyscale</span>
+<span style="color: #60a0b0; font-style: italic"># image and applied a 5x5 mean filter, by using the commands:</span>
+
+img3 <span style="color: #666666">=</span> cv2<span style="color: #666666">.</span>imread(<span style="color: #4070a0">&#39;image1.jpg&#39;</span>, <span style="color: #40a070">0</span>)<span style="color: #666666">.</span>astype(<span style="color: #4070a0">&#39;float&#39;</span>)
+h1 <span style="color: #666666">=</span> np<span style="color: #666666">.</span>ones((<span style="color: #40a070">5</span>,<span style="color: #40a070">5</span>)) <span style="color: #666666">/</span> <span style="color: #40a070">25</span>;
+img4 <span style="color: #666666">=</span> cv2<span style="color: #666666">.</span>filter2D(img3,<span style="color: #666666">-</span><span style="color: #40a070">1</span>,h1)
+
+plt<span style="color: #666666">.</span>figure()
+plt<span style="color: #666666">.</span>imshow(img3,cmap<span style="color: #666666">=</span><span style="color: #4070a0">&#39;gray&#39;</span>)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&#39;Original image&#39;</span>);
+
+plt<span style="color: #666666">.</span>figure()
+plt<span style="color: #666666">.</span>imshow(img4,cmap<span style="color: #666666">=</span><span style="color: #4070a0">&#39;gray&#39;</span>)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&#39;Filtered image&#39;</span>)
+
+<span style="color: #60a0b0; font-style: italic"># The filtered image have a two pixel wide black frame.</span>
+<span style="color: #60a0b0; font-style: italic"># a) Use the indexing techniques described above to remove these.</span>
+<span style="color: #60a0b0; font-style: italic"># b) Use scipy.signal.convolve2d with the option mode=&#39;valid&#39; to remove the borders.</span>
+
+<span style="color: #60a0b0; font-style: italic">################</span>
+<span style="color: #60a0b0; font-style: italic">## EXERCISE 2</span>
+<span style="color: #60a0b0; font-style: italic">################</span>
+
+<span style="color: #60a0b0; font-style: italic"># Make a function that returns the same as np.histogram</span>
+<span style="color: #60a0b0; font-style: italic">#</span>
+<span style="color: #60a0b0; font-style: italic"># Although it is allowed to use loops, try to avoid using them where</span>
+<span style="color: #60a0b0; font-style: italic"># it is possible. One loop should suffice.</span>
+
+
+<span style="color: #60a0b0; font-style: italic">################</span>
+<span style="color: #60a0b0; font-style: italic">## EXERCISE 3</span>
+<span style="color: #60a0b0; font-style: italic">################</span>
+
+<span style="color: #60a0b0; font-style: italic"># Above, we loaded the image &#39;image2.jpg&#39; using the command:</span>
+img2 <span style="color: #666666">=</span> cv2<span style="color: #666666">.</span>imread(<span style="color: #4070a0">&#39;image2.jpg&#39;</span>, <span style="color: #40a070">0</span>)<span style="color: #666666">.</span>astype(<span style="color: #4070a0">&#39;float&#39;</span>)
+
+<span style="color: #60a0b0; font-style: italic"># a)</span>
+<span style="color: #60a0b0; font-style: italic"># Use the operators &gt;, &lt;, &gt;=, &lt;= to threshold IMG2 using an arbitrary</span>
+<span style="color: #60a0b0; font-style: italic"># threshold.</span>
+<span style="color: #60a0b0; font-style: italic">#</span>
+<span style="color: #60a0b0; font-style: italic"># b)</span>
+<span style="color: #60a0b0; font-style: italic"># Use an implemented method to compute the threshold using Otsu&#39;s method,</span>
+<span style="color: #60a0b0; font-style: italic"># e. g. from scipy or openCV</span>
+<span style="color: #60a0b0; font-style: italic">#</span>
+<span style="color: #60a0b0; font-style: italic"># c)</span>
+<span style="color: #60a0b0; font-style: italic"># Compare the binary image resulting from part a with the one from part b</span>
+<span style="color: #60a0b0; font-style: italic"># by displaying the images. Do you notice any differences?</span>
+<span style="color: #60a0b0; font-style: italic"># Display also the difference between the images.</span>
+
+<span style="color: #60a0b0; font-style: italic">################</span>
+<span style="color: #60a0b0; font-style: italic">## EXERCISE 4</span>
+<span style="color: #60a0b0; font-style: italic">################</span>
+
+<span style="color: #60a0b0; font-style: italic"># Normalize resXY such that np.max(resXY) = 255 and np.min(resXY) = 0.</span>
+<span style="color: #60a0b0; font-style: italic"># Threshold the result with T = 100.</span>
+<span style="color: #60a0b0; font-style: italic">#</span>
+<span style="color: #60a0b0; font-style: italic"># What would you do if you wanted to obtain an image containing</span>
+<span style="color: #60a0b0; font-style: italic"># only the seam, and the entire seam, of the the ball?</span>
+</pre></div>
+<p>
+The program is available "here":"https://github.com/krisbhei/IN5520-IN9520/1/exerciseset_python.py 
+" (right click and press "save link as").
+
+<h1 id="___sec1" class="anchor">Suggested solution </h1>
+
+<p>
+
+<!-- code=python (!bc pypro) typeset with pygments style "friendly" -->
+<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span><span style="color: #007020; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">cv2</span>
+<span style="color: #007020; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">numpy</span> <span style="color: #007020; font-weight: bold">as</span> <span style="color: #0e84b5; font-weight: bold">np</span>
+<span style="color: #007020; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">matplotlib.pyplot</span> <span style="color: #007020; font-weight: bold">as</span> <span style="color: #0e84b5; font-weight: bold">plt</span>
+
+<span style="color: #60a0b0; font-style: italic">### Exercise 1</span>
+
+img3 <span style="color: #666666">=</span> cv2<span style="color: #666666">.</span>imread(<span style="color: #4070a0">&#39;image1.jpg&#39;</span>, <span style="color: #40a070">0</span>)<span style="color: #666666">.</span>astype(<span style="color: #4070a0">&#39;float&#39;</span>)
+h1 <span style="color: #666666">=</span> np<span style="color: #666666">.</span>ones((<span style="color: #40a070">5</span>,<span style="color: #40a070">5</span>)) <span style="color: #666666">/</span> <span style="color: #40a070">25</span>;
+img4 <span style="color: #666666">=</span> cv2<span style="color: #666666">.</span>filter2D(img3,<span style="color: #666666">-</span><span style="color: #40a070">1</span>,h1)
+
+<span style="color: #60a0b0; font-style: italic"># a)</span>
+img4_indexed <span style="color: #666666">=</span> img4[<span style="color: #40a070">2</span>:<span style="color: #666666">-</span><span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>:<span style="color: #666666">-</span><span style="color: #40a070">2</span>]
+
+plt<span style="color: #666666">.</span>figure()
+plt<span style="color: #666666">.</span>imshow(img4_indexed,cmap<span style="color: #666666">=</span><span style="color: #4070a0">&#39;gray&#39;</span>)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&#39;Filtered img3 without borders, indexed&#39;</span>)
+
+<span style="color: #60a0b0; font-style: italic"># b)</span>
+
+<span style="color: #007020; font-weight: bold">from</span> <span style="color: #0e84b5; font-weight: bold">scipy.signal</span> <span style="color: #007020; font-weight: bold">import</span> convolve2d
+
+img4_conv2 <span style="color: #666666">=</span> convolve2d(img3<span style="color: #666666">.</span>astype(<span style="color: #4070a0">&#39;float&#39;</span>),h1,mode<span style="color: #666666">=</span><span style="color: #4070a0">&#39;valid&#39;</span>)
+
+plt<span style="color: #666666">.</span>figure()
+plt<span style="color: #666666">.</span>imshow(img4_conv2,cmap<span style="color: #666666">=</span><span style="color: #4070a0">&#39;gray&#39;</span>)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&#39;Filtered img3 without borders, convolve2d&#39;</span>)
+
+<span style="color: #60a0b0; font-style: italic">#plt.show()</span>
+
+<span style="color: #60a0b0; font-style: italic"># Just to check if a) and b) gives the same answer:</span>
+<span style="color: #007020; font-weight: bold">print</span>(<span style="color: #4070a0">&quot;Max absolute error between index and filtered using valid: </span><span style="color: #70a0d0; font-style: italic">%g</span><span style="color: #4070a0">&quot;</span>\
+      <span style="color: #666666">%</span>np<span style="color: #666666">.</span>max(np<span style="color: #666666">.</span>abs(img4_conv2 <span style="color: #666666">-</span> img4_indexed)))
+
+<span style="color: #60a0b0; font-style: italic">### Exercise 2</span>
+
+hist_np,bins <span style="color: #666666">=</span> np<span style="color: #666666">.</span>histogram(img3<span style="color: #666666">.</span>ravel(), bins<span style="color: #666666">=</span><span style="color: #40a070">256</span>,<span style="color: #007020">range</span><span style="color: #666666">=</span>(<span style="color: #40a070">0</span>,<span style="color: #40a070">256</span>))
+
+<span style="color: #007020; font-weight: bold">def</span> <span style="color: #06287e">iimhist</span>(img):
+    h <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros(<span style="color: #40a070">256</span>)
+    <span style="color: #007020; font-weight: bold">for</span> i <span style="color: #007020; font-weight: bold">in</span> <span style="color: #007020">range</span>(<span style="color: #40a070">256</span>):
+        h[i] <span style="color: #666666">=</span> np<span style="color: #666666">.</span>sum(img <span style="color: #666666">==</span> i)
+        <span style="color: #60a0b0; font-style: italic"># img == i makes a boolean matrix. By summing over the matrix,</span>
+        <span style="color: #60a0b0; font-style: italic"># all entries being False evaluates to 0, and all entries being True</span>
+        <span style="color: #60a0b0; font-style: italic"># to 1.</span>
+    <span style="color: #007020; font-weight: bold">return</span> h
+
+hist_ <span style="color: #666666">=</span> iimhist(img3)
+
+<span style="color: #60a0b0; font-style: italic"># Too check is the implementation is correct compared to np.histogram</span>
+<span style="color: #007020; font-weight: bold">print</span>(<span style="color: #4070a0">&quot;Max absolute difference between np.histogram and iimhist: </span><span style="color: #70a0d0; font-style: italic">%g</span><span style="color: #4070a0">&quot;</span><span style="color: #666666">%</span>np<span style="color: #666666">.</span>max(np<span style="color: #666666">.</span>abs(hist_np <span style="color: #666666">-</span> hist_)))
+
+plt<span style="color: #666666">.</span>figure()
+plt<span style="color: #666666">.</span>bar(bins[:<span style="color: #666666">-</span><span style="color: #40a070">1</span>], hist_np) <span style="color: #60a0b0; font-style: italic">#take the whole bin array except for the last element,</span>
+                            <span style="color: #60a0b0; font-style: italic">#this is equal to 256.</span>
+plt<span style="color: #666666">.</span>bar(bins[:<span style="color: #666666">-</span><span style="color: #40a070">1</span>], hist_)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&#39;Histogram using numpy&#39;</span>)
+plt<span style="color: #666666">.</span>legend([<span style="color: #4070a0">&#39;numpy&#39;</span>, <span style="color: #4070a0">&#39;iimhist&#39;</span>])
+
+<span style="color: #60a0b0; font-style: italic">#plt.show()</span>
+
+
+<span style="color: #60a0b0; font-style: italic">### Exercise 3</span>
+
+<span style="color: #60a0b0; font-style: italic"># a)</span>
+img2 <span style="color: #666666">=</span> cv2<span style="color: #666666">.</span>imread(<span style="color: #4070a0">&#39;image2.jpg&#39;</span>, <span style="color: #40a070">0</span>)
+
+img2_size <span style="color: #666666">=</span> img2<span style="color: #666666">.</span>shape
+
+thresholded1 <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros(img2_size) <span style="color: #60a0b0; font-style: italic"># Make a matrix of the same size as img2</span>
+thresholded1[img2 <span style="color: #666666">&gt;</span> <span style="color: #40a070">100</span>] <span style="color: #666666">=</span> <span style="color: #40a070">1</span>
+
+thresholded2 <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros(img2_size)
+thresholded2[img2 <span style="color: #666666">&lt;</span> <span style="color: #40a070">100</span>] <span style="color: #666666">=</span> <span style="color: #40a070">1</span>
+
+thresholded3 <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros(img2_size)
+thresholded3[img2 <span style="color: #666666">&gt;=</span> <span style="color: #40a070">120</span>] <span style="color: #666666">=</span> <span style="color: #40a070">1</span>
+
+thresholded4 <span style="color: #666666">=</span> np<span style="color: #666666">.</span>zeros(img2_size)
+thresholded4[img2 <span style="color: #666666">&lt;=</span> <span style="color: #40a070">120</span>] <span style="color: #666666">=</span> <span style="color: #40a070">1</span>
+
+<span style="color: #60a0b0; font-style: italic"># Make a figure with several plots iwhtin a window</span>
+plt<span style="color: #666666">.</span>figure()
+
+plt<span style="color: #666666">.</span>subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">1</span>)
+plt<span style="color: #666666">.</span>imshow(thresholded1,cmap<span style="color: #666666">=</span><span style="color: #4070a0">&#39;gray&#39;</span>)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&quot;Pixel values from img2 greater than 100&quot;</span>)
+
+plt<span style="color: #666666">.</span>subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>)
+plt<span style="color: #666666">.</span>imshow(thresholded2,cmap<span style="color: #666666">=</span><span style="color: #4070a0">&#39;gray&#39;</span>)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&quot;Pixel values from img2 less than 100&quot;</span>)
+
+plt<span style="color: #666666">.</span>subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">3</span>)
+plt<span style="color: #666666">.</span>imshow(thresholded3,cmap<span style="color: #666666">=</span><span style="color: #4070a0">&#39;gray&#39;</span>)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&quot;Pixel values from img2 greater or equal to 120&quot;</span>)
+
+plt<span style="color: #666666">.</span>subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">4</span>)
+plt<span style="color: #666666">.</span>imshow(thresholded4,cmap<span style="color: #666666">=</span><span style="color: #4070a0">&#39;gray&#39;</span>)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&quot;Pixel values from img2 less or equal to 120&quot;</span>)
+
+<span style="color: #60a0b0; font-style: italic">#plt.show()</span>
+
+<span style="color: #60a0b0; font-style: italic"># b)</span>
+thr_otsu,img2_otsu <span style="color: #666666">=</span> cv2<span style="color: #666666">.</span>threshold(img2,<span style="color: #40a070">0</span>,<span style="color: #40a070">1</span>,cv2<span style="color: #666666">.</span>THRESH_BINARY<span style="color: #666666">+</span>cv2<span style="color: #666666">.</span>THRESH_OTSU)
+
+plt<span style="color: #666666">.</span>figure()
+plt<span style="color: #666666">.</span>imshow(img2_otsu,cmap<span style="color: #666666">=</span><span style="color: #4070a0">&#39;gray&#39;</span>)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&#39;img2 thresholded with Otsu`s method&#39;</span>)
+
+<span style="color: #60a0b0; font-style: italic">#plt.show()</span>
+
+<span style="color: #60a0b0; font-style: italic"># c)</span>
+plt<span style="color: #666666">.</span>figure()
+
+plt<span style="color: #666666">.</span>subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">1</span>)
+plt<span style="color: #666666">.</span>imshow(np<span style="color: #666666">.</span>abs(thresholded1<span style="color: #666666">-</span>img2_otsu),cmap<span style="color: #666666">=</span><span style="color: #4070a0">&#39;gray&#39;</span>)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&quot;Difference between thresholded1 and </span><span style="color: #4070a0; font-weight: bold">\n</span><span style="color: #4070a0"> thresholded image using Otsu`s method&quot;</span>)
+
+plt<span style="color: #666666">.</span>subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>)
+plt<span style="color: #666666">.</span>imshow(np<span style="color: #666666">.</span>abs(thresholded2<span style="color: #666666">-</span>img2_otsu),cmap<span style="color: #666666">=</span><span style="color: #4070a0">&#39;gray&#39;</span>)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&quot;Difference between thresholded2 and </span><span style="color: #4070a0; font-weight: bold">\n</span><span style="color: #4070a0"> thresholded image using Otsu`s method&quot;</span>)
+
+plt<span style="color: #666666">.</span>subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">3</span>)
+plt<span style="color: #666666">.</span>imshow(np<span style="color: #666666">.</span>abs(thresholded3<span style="color: #666666">-</span>img2_otsu),cmap<span style="color: #666666">=</span><span style="color: #4070a0">&#39;gray&#39;</span>)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&quot;Difference between thresholded3 and </span><span style="color: #4070a0; font-weight: bold">\n</span><span style="color: #4070a0"> thresholded image using Otsu`s method&quot;</span>)
+
+plt<span style="color: #666666">.</span>subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">4</span>)
+plt<span style="color: #666666">.</span>imshow(np<span style="color: #666666">.</span>abs(thresholded4<span style="color: #666666">-</span>img2_otsu),cmap<span style="color: #666666">=</span><span style="color: #4070a0">&#39;gray&#39;</span>)
+plt<span style="color: #666666">.</span>title(<span style="color: #4070a0">&quot;Difference between thresholded4 and </span><span style="color: #4070a0; font-weight: bold">\n</span><span style="color: #4070a0"> thresholded image using Otsu`s method&quot;</span>)
+
+<span style="color: #60a0b0; font-style: italic">#plt.show()</span>
+
+
+<span style="color: #60a0b0; font-style: italic">### Exercise 4</span>
+
+h2x <span style="color: #666666">=</span> np<span style="color: #666666">.</span>array([[<span style="color: #666666">-</span><span style="color: #40a070">1</span>,<span style="color: #666666">-</span><span style="color: #40a070">2</span>,<span style="color: #666666">-</span><span style="color: #40a070">1</span>],\
+                [<span style="color: #40a070">0</span>,<span style="color: #40a070">0</span>,<span style="color: #40a070">0</span>],\
+                [<span style="color: #40a070">1</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">1</span>]])
+
+h2y <span style="color: #666666">=</span> np<span style="color: #666666">.</span>array([[<span style="color: #666666">-</span><span style="color: #40a070">1</span>,<span style="color: #40a070">0</span>,<span style="color: #40a070">1</span>],\
+                [<span style="color: #666666">-</span><span style="color: #40a070">2</span>,<span style="color: #40a070">0</span>,<span style="color: #40a070">2</span>],\
+                [<span style="color: #666666">-</span><span style="color: #40a070">1</span>,<span style="color: #40a070">0</span>,<span style="color: #40a070">1</span>]])
+
+resX <span style="color: #666666">=</span> cv2<span style="color: #666666">.</span>filter2D(img3,<span style="color: #666666">-</span><span style="color: #40a070">1</span>, h2x)
+resY <span style="color: #666666">=</span> cv2<span style="color: #666666">.</span>filter2D(img3,<span style="color: #666666">-</span><span style="color: #40a070">1</span>, h2y)
+resXY <span style="color: #666666">=</span> np<span style="color: #666666">.</span>sqrt(resX<span style="color: #666666">**</span><span style="color: #40a070">2</span> <span style="color: #666666">+</span> resY<span style="color: #666666">**</span><span style="color: #40a070">2</span>)
+
+resXY_norm <span style="color: #666666">=</span> cv2<span style="color: #666666">.</span>normalize(resXY, <span style="color: #007020">None</span>, <span style="color: #40a070">0</span>, <span style="color: #40a070">255</span>, cv2<span style="color: #666666">.</span>NORM_MINMAX)
+
+<span style="color: #007020; font-weight: bold">print</span>(<span style="color: #4070a0">&quot;max(resXY_norm) = </span><span style="color: #70a0d0; font-style: italic">%g</span><span style="color: #4070a0">&quot;</span><span style="color: #666666">%</span>np<span style="color: #666666">.</span>max(resXY_norm))
+<span style="color: #007020; font-weight: bold">print</span>(<span style="color: #4070a0">&quot;min(resXY_norm) = </span><span style="color: #70a0d0; font-style: italic">%g</span><span style="color: #4070a0">&quot;</span><span style="color: #666666">%</span>np<span style="color: #666666">.</span>min(resXY_norm))
+
+<span style="color: #60a0b0; font-style: italic"># One could also do the normalization &#39;manually&#39;.</span>
+<span style="color: #60a0b0; font-style: italic"># The normalization could be seen as a linear transform of the pixel</span>
+<span style="color: #60a0b0; font-style: italic"># intensities: normalized_img = a*img + b</span>
+<span style="color: #60a0b0; font-style: italic"># To determine the coefficients a and b, the following equations can</span>
+<span style="color: #60a0b0; font-style: italic"># be solved:</span>
+<span style="color: #60a0b0; font-style: italic">#</span>
+<span style="color: #60a0b0; font-style: italic"># 0 = a*min(img) + b</span>
+<span style="color: #60a0b0; font-style: italic"># 255 = a*max(img) + b</span>
+<span style="color: #60a0b0; font-style: italic">#</span>
+<span style="color: #60a0b0; font-style: italic"># which yields</span>
+<span style="color: #60a0b0; font-style: italic"># a = 255/( max(img) - min(img) )</span>
+<span style="color: #60a0b0; font-style: italic"># b = -a*min(img)</span>
+<span style="color: #60a0b0; font-style: italic">#   = -( 255 * min(img) )/( max(img) - min(img) )</span>
+<span style="color: #60a0b0; font-style: italic">#</span>
+<span style="color: #60a0b0; font-style: italic"># and gives the following expression for the normalization</span>
+<span style="color: #60a0b0; font-style: italic">#</span>
+<span style="color: #60a0b0; font-style: italic"># normalized_img = 255/( max(img) - min(img) )*( img -  min(img) )</span>
+
+resXY_norm2 <span style="color: #666666">=</span> <span style="color: #40a070">255</span><span style="color: #666666">/</span>( np<span style="color: #666666">.</span>max(resXY) <span style="color: #666666">-</span> np<span style="color: #666666">.</span>min(resXY) )<span style="color: #666666">*</span>( resXY <span style="color: #666666">-</span>  np<span style="color: #666666">.</span>min(resXY) )
+
+<span style="color: #007020; font-weight: bold">print</span>(<span style="color: #4070a0">&quot;Max absolute difference between the normalizations: </span><span style="color: #70a0d0; font-style: italic">%g</span><span style="color: #4070a0">&quot;</span><span style="color: #666666">%</span>np<span style="color: #666666">.</span>max(np<span style="color: #666666">.</span>abs(resXY_norm <span style="color: #666666">-</span> resXY_norm2)))
+</pre></div>
+<p>
+The program is available "here":"https://github.com/krisbhei/IN5520-IN9520/1/proposed_solutions.py 
+" (right click and press "save link as").
+
+<!-- ------------------- end of main content --------------- -->
+
+</div>  <!-- end container -->
+<!-- include javascript, jQuery *first* -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+<!-- Bootstrap footer
+<footer>
+<a href="http://..."><img width="250" align=right src="http://..."></a>
+</footer>
+-->
+
+
+<center style="font-size:80%">
+<!-- copyright -->  Made with <a href="https://github.com/hplgit/doconce">DocOnce</a>
+</center>
+
+
+</body>
+</html>
+    
+

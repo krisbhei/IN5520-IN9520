@@ -151,13 +151,13 @@ img2 = imread(<span style="color: #4070a0">&#39;coins.png&#39;</span>);
 thresholded1 = <span style="color: #007020">zeros</span>(<span style="color: #007020">size</span>(img2)); <span style="color: #60a0b0; font-style: italic">% Make a matrix of the same size as img2</span>
 thresholded1(img2 <span style="color: #666666">&gt;</span> <span style="color: #40a070">100</span>) = <span style="color: #40a070">1</span>;
 
-thresholded2 = <span style="color: #007020">zeros</span>(<span style="color: #007020">size</span>(img2)); <span style="color: #60a0b0; font-style: italic">% Make a matrix of the same size as img2</span>
+thresholded2 = <span style="color: #007020">zeros</span>(<span style="color: #007020">size</span>(img2)); 
 thresholded2(img2 <span style="color: #666666">&lt;</span> <span style="color: #40a070">100</span>) = <span style="color: #40a070">1</span>;
 
-thresholded3 = <span style="color: #007020">zeros</span>(<span style="color: #007020">size</span>(img2)); <span style="color: #60a0b0; font-style: italic">% Make a matrix of the same size as img2</span>
+thresholded3 = <span style="color: #007020">zeros</span>(<span style="color: #007020">size</span>(img2));
 thresholded3(img2 <span style="color: #666666">&gt;</span>= <span style="color: #40a070">120</span>) = <span style="color: #40a070">1</span>;
 
-thresholded4 = <span style="color: #007020">zeros</span>(<span style="color: #007020">size</span>(img2)); <span style="color: #60a0b0; font-style: italic">% Make a matrix of the same size as img2</span>
+thresholded4 = <span style="color: #007020">zeros</span>(<span style="color: #007020">size</span>(img2)); 
 thresholded4(img2 <span style="color: #666666">&lt;</span>= <span style="color: #40a070">120</span>) = <span style="color: #40a070">1</span>;
 
 <span style="color: #60a0b0; font-style: italic">% Make subplots of the thresholded images </span>
@@ -169,22 +169,22 @@ figure()
 subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">1</span>) 
 imagesc(thresholded1)
 colormap gray
-title(<span style="color: #4070a0">&#39;Pixel values of img2 greater than 100&#39;</span>)
+title(<span style="color: #4070a0">&#39;Pixel values from img2 greater than 100&#39;</span>)
 
 subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>) 
 imagesc(thresholded2)
 colormap gray
-title(<span style="color: #4070a0">&#39;Pixel values of img2 less than 100&#39;</span>)
+title(<span style="color: #4070a0">&#39;Pixel values from img2 less than 100&#39;</span>)
 
 subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">3</span>) 
 imagesc(thresholded3)
 colormap gray
-title(<span style="color: #4070a0">&#39;Pixel values of img2 greater or equal to 120&#39;</span>)
+title(<span style="color: #4070a0">&#39;Pixel values from img2 greater or equal to 120&#39;</span>)
 
 subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">2</span>,<span style="color: #40a070">4</span>) 
 imagesc(thresholded4)
 colormap gray
-title(<span style="color: #4070a0">&#39;Pixel values of img2 less or equal to 120&#39;</span>)
+title(<span style="color: #4070a0">&#39;Pixel values from img2 less or equal to 120&#39;</span>)
 
 <span style="color: #60a0b0; font-style: italic">% b)</span>
 thr_otsu = graythresh(img2);
