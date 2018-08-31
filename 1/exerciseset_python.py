@@ -262,7 +262,7 @@ h2y = np.array([[-1,0,1],\
 
 resX = cv2.filter2D(img3,-1, h2x)
 resY = cv2.filter2D(img3,-1, h2y)
-resXY = np.sqrt(resX**2 + resY**2);
+resXY = np.sqrt(resX**2 + resY**2)
 
 # Display the gradient magnitude:
 plt.figure()
@@ -271,3 +271,67 @@ plt.title('Gradient magnitude')
 
 # Show the images
 plt.show()
+
+
+################
+## EXERCISE 1
+################
+
+# Above, we loaded the image 'image1.jpg', converted it to a greyscale
+# image and applied a 5x5 mean filter, by using the commands:
+
+img3 = cv2.imread('image1.jpg', 0).astype('float')
+h1 = np.ones((5,5)) / 25;
+img4 = cv2.filter2D(img3,-1,h1)
+
+plt.figure()
+plt.imshow(img3,cmap='gray')
+plt.title('Original image');
+
+plt.figure()
+plt.imshow(img4,cmap='gray')
+plt.title('Filtered image')
+
+# The filtered image have a two pixel wide black frame.
+# a) Use the indexing techniques described above to remove these.
+# b) Use scipy.signal.convolve2d with the option mode='valid' to remove the borders.
+
+################
+## EXERCISE 2
+################
+
+# Make a function that returns the same as np.histogram
+#
+# Although it is allowed to use loops, try to avoid using them where
+# it is possible. One loop should suffice.
+
+
+################
+## EXERCISE 3
+################
+
+# Above, we loaded the image 'image2.jpg' using the command:
+img2 = cv2.imread('image2.jpg', 0).astype('float')
+
+# a)
+# Use the operators >, <, >=, <= to threshold IMG2 using an arbitrary
+# threshold.
+#
+# b)
+# Use an implemented method to compute the threshold using Otsu's method,
+# e. g. from scipy or openCV
+#
+# c)
+# Compare the binary image resulting from part a with the one from part b
+# by displaying the images. Do you notice any differences?
+# Display also the difference between the images.
+
+################
+## EXERCISE 4
+################
+
+# Normalize resXY such that np.max(resXY) = 255 and np.min(resXY) = 0.
+# Threshold the result with T = 100.
+#
+# What would you do if you wanted to obtain an image containing
+# only the seam, and the entire seam, of the the ball?

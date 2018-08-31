@@ -59,13 +59,13 @@ img2 = imread('coins.png');
 thresholded1 = zeros(size(img2)); % Make a matrix of the same size as img2
 thresholded1(img2 > 100) = 1;
 
-thresholded2 = zeros(size(img2)); % Make a matrix of the same size as img2
+thresholded2 = zeros(size(img2)); 
 thresholded2(img2 < 100) = 1;
 
-thresholded3 = zeros(size(img2)); % Make a matrix of the same size as img2
+thresholded3 = zeros(size(img2));
 thresholded3(img2 >= 120) = 1;
 
-thresholded4 = zeros(size(img2)); % Make a matrix of the same size as img2
+thresholded4 = zeros(size(img2)); 
 thresholded4(img2 <= 120) = 1;
 
 % Make subplots of the thresholded images 
@@ -77,22 +77,22 @@ figure()
 subplot(2,2,1) 
 imagesc(thresholded1)
 colormap gray
-title('Pixel values of img2 greater than 100')
+title('Pixel values from img2 greater than 100')
 
 subplot(2,2,2) 
 imagesc(thresholded2)
 colormap gray
-title('Pixel values of img2 less than 100')
+title('Pixel values from img2 less than 100')
 
 subplot(2,2,3) 
 imagesc(thresholded3)
 colormap gray
-title('Pixel values of img2 greater or equal to 120')
+title('Pixel values from img2 greater or equal to 120')
 
 subplot(2,2,4) 
 imagesc(thresholded4)
 colormap gray
-title('Pixel values of img2 less or equal to 120')
+title('Pixel values from img2 less or equal to 120')
 
 % b)
 thr_otsu = graythresh(img2);
