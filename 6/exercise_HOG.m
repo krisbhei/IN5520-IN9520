@@ -213,9 +213,3 @@ for ii = 1:num_test
 end
 
 fprintf('percentage of correctly classified imarr samples using HOG: %g percent\n', (sum(estimated_imarr_labels_hog(:) == test_imarr_labels(:))/num_test*100) );
-
-% 10
-Mdl = fitcknn(train_imarr,train_imarr_labels.','NumNeighbors',3,'Standardize',0);
-knnlabel = predict(Mdl,test_imarr);
-
-fprintf('percentage of correctly classified imarr samples using knn: %g percent\n', sum(knnlabel.' == test_imarr_labels)/num_test*100)

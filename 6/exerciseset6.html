@@ -534,12 +534,6 @@ estimated_imarr_labels_hog = <span style="color: #007020">zeros</span>(<span sty
 <span style="color: #007020; font-weight: bold">end</span>
 
 fprintf(<span style="color: #4070a0">&#39;percentage of correctly classified imarr samples using HOG: %g percent\n&#39;</span>, (sum(estimated_imarr_labels_hog(:) <span style="color: #666666">==</span> test_imarr_labels(:))<span style="color: #666666">/</span>num_test<span style="color: #666666">*</span><span style="color: #40a070">100</span>) );
-
-<span style="color: #60a0b0; font-style: italic">% 10</span>
-Mdl = fitcknn(train_imarr,train_imarr_labels.<span style="color: #666666">&#39;</span>,<span style="color: #4070a0">&#39;NumNeighbors&#39;</span>,<span style="color: #40a070">3</span>,<span style="color: #4070a0">&#39;Standardize&#39;</span>,<span style="color: #40a070">0</span>);
-knnlabel = predict(Mdl,test_imarr);
-
-fprintf(<span style="color: #4070a0">&#39;percentage of correctly classified imarr samples using knn: %g percent\n&#39;</span>, sum(knnlabel.<span style="color: #666666">&#39;</span> <span style="color: #666666">==</span> test_imarr_labels)<span style="color: #666666">/</span>num_test<span style="color: #666666">*</span><span style="color: #40a070">100</span>)
 </pre></div>
 <p>
 The program is available <a href="https://github.com/krisbhei/IN5520-IN9520/blob/master/6/exercise_HOG.m" target="_self">here</a> (right click and press "save link as").
