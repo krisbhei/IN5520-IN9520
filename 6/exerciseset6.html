@@ -1,0 +1,583 @@
+<!--
+Automatically generated HTML file from DocOnce source
+(https://github.com/hplgit/doconce/)
+-->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="DocOnce: https://github.com/hplgit/doconce/" />
+<meta name="description" content="Proposed solutions to the exercises in the first exercise set in Matlab">
+
+<title>Proposed solutions to the exercises in the first exercise set in Matlab</title>
+
+<!-- Bootstrap style: bootswatch_yeti -->
+<link href="https://netdna.bootstrapcdn.com/bootswatch/3.1.1/yeti/bootstrap.min.css" rel="stylesheet">
+<!-- not necessary
+<link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+-->
+
+<style type="text/css">
+/* Let inline verbatim have the same color as the surroundings */
+code { color: inherit; background-color: transparent; }
+
+/* Add scrollbar to dropdown menus in bootstrap navigation bar */
+.dropdown-menu {
+   height: auto;
+   max-height: 400px;
+   overflow-x: hidden;
+}
+
+/* Adds an invisible element before each target to offset for the navigation
+   bar */
+.anchor::before {
+  content:"";
+  display:block;
+  height:45px;      /* fixed header height for style bootswatch_yeti */
+  margin:-45px 0 0; /* negative fixed header height */
+}
+
+body { font-size:16px; }
+</style>
+
+
+</head>
+
+<!-- tocinfo
+{'highest level': 1,
+ 'sections': [('Exercise 1', 1, None, '___sec0'),
+              ('Exercise 2', 1, None, '___sec1')]}
+end of tocinfo -->
+
+<body>
+
+    
+<!-- Bootstrap navigation bar -->
+<div class="navbar navbar-default navbar-fixed-top">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="exerciseset6.html">Proposed solutions to the exercises in the first exercise set in Matlab</a>
+  </div>
+
+  <div class="navbar-collapse collapse navbar-responsive-collapse">
+    <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+     <!-- navigation toc: --> <li><a href="#___sec0" style="font-size: 14px; padding: 4px 15px;">Exercise 1</a></li>
+     <!-- navigation toc: --> <li><a href="#___sec1" style="font-size: 14px; padding: 4px 15px;">Exercise 2</a></li>
+
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+</div> <!-- end of navigation bar -->
+
+<div class="container">
+
+<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p> <!-- add vertical space -->
+
+<!-- ------------------- main content ---------------------- -->
+
+<p>
+
+
+<div class="jumbotron">
+<center><h1>Proposed solutions to the exercises in the first exercise set in Matlab</h1></center>  <!-- document title -->
+
+<p>
+Here, you can find the proposed solutions for the sixth exercise set, written in Matlab.
+
+<p>
+If you find any errors or wish to discuss your results compared to the results presented here,
+please feel free to send an email or ask in the group sessions!
+
+<p>
+</div> <!-- end jumbotron -->
+
+<h1 id="___sec0" class="anchor">Exercise 1 </h1>
+
+<p>
+
+<!-- code=matlab (!bc mpro) typeset with pygments style "friendly" -->
+<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>close all 
+
+<span style="color: #60a0b0; font-style: italic">% Read mask</span>
+class_train_mask = double(imread(<span style="color: #4070a0">&#39;tm_train.png&#39;</span>));
+
+num_classes = <span style="color: #40a070">4</span>;
+
+<span style="color: #60a0b0; font-style: italic">% Estimate a priory probability (if one want to)</span>
+P = <span style="color: #007020">zeros</span>(<span style="color: #40a070">1</span>,num_classes);
+<span style="color: #007020; font-weight: bold">for</span> ii = <span style="color: #40a070">1</span>:num_classes 
+    P(ii) = sum(sum(class_train_mask <span style="color: #666666">==</span> ii)); 
+<span style="color: #007020; font-weight: bold">end</span>
+P = P<span style="color: #666666">./</span>sum(P);
+
+<span style="color: #60a0b0; font-style: italic">% Read in the images</span>
+n = <span style="color: #40a070">260</span>; m = <span style="color: #40a070">333</span>;
+num_bands = <span style="color: #40a070">6</span>;
+
+data = <span style="color: #007020">zeros</span>(n,m,num_bands);
+<span style="color: #007020; font-weight: bold">for</span> ii = <span style="color: #40a070">1</span>:num_bands
+    data(:,:,ii) = imread(sprintf(<span style="color: #4070a0">&#39;tm%d.png&#39;</span>,ii));
+<span style="color: #007020; font-weight: bold">end</span>
+
+<span style="color: #60a0b0; font-style: italic">% Classify</span>
+est_imgs = <span style="color: #007020">zeros</span>(n,m,num_bands);
+
+<span style="color: #007020; font-weight: bold">for</span> ii = <span style="color: #40a070">1</span>:num_bands
+    tmp_data = double(data(:,:,ii));
+    
+    class_means = <span style="color: #007020">zeros</span>(<span style="color: #40a070">1</span>,num_classes);
+    class_stds = <span style="color: #007020">zeros</span>(<span style="color: #40a070">1</span>,num_classes);
+    
+    <span style="color: #60a0b0; font-style: italic">% train</span>
+    <span style="color: #007020; font-weight: bold">for</span> jj = <span style="color: #40a070">1</span>:num_classes 
+        class_tmp_data = tmp_data(class_train_mask <span style="color: #666666">==</span> jj); 
+        
+        class_means(jj) = mean(class_tmp_data);
+        class_stds(jj) = <span style="color: #007020">sqrt</span>(var(class_tmp_data)); 
+    <span style="color: #007020; font-weight: bold">end</span>
+    
+    <span style="color: #60a0b0; font-style: italic">% perform the classification </span>
+    <span style="color: #007020; font-weight: bold">for</span> k = <span style="color: #40a070">1</span>:n
+        <span style="color: #007020; font-weight: bold">for</span> l = <span style="color: #40a070">1</span>:m
+            
+            <span style="color: #60a0b0; font-style: italic">% outcomment P in the calculation for p if you wish to assume</span>
+            <span style="color: #60a0b0; font-style: italic">% uniform a priory probability for each class, as it won&#39;t</span>
+            <span style="color: #60a0b0; font-style: italic">% affect the value of p for each class.</span>
+            
+            p = (<span style="color: #40a070">1.</span><span style="color: #666666">/</span>class_stds) <span style="color: #666666">.*</span> <span style="color: #007020">exp</span>(<span style="color: #666666">-</span>.<span style="color: #40a070">5.</span><span style="color: #666666">*</span>( (tmp_data(k,l) <span style="color: #666666">-</span> class_means) <span style="color: #666666">./</span> class_stds )<span style="color: #666666">.^</span><span style="color: #40a070">2</span> );<span style="color: #60a0b0; font-style: italic">%.*P; % factor 1/sqrt(2*pi) does not have that much to say. </span>
+            [<span style="color: #666666">~</span>, est_imgs(k,l,ii)] = max(p);
+        <span style="color: #007020; font-weight: bold">end</span>
+    <span style="color: #007020; font-weight: bold">end</span>
+    
+<span style="color: #007020; font-weight: bold">end</span>
+
+<span style="color: #60a0b0; font-style: italic">% Find test accuracy </span>
+
+class_test_mask = imread(<span style="color: #4070a0">&#39;tm_test.png&#39;</span>);
+tot_test = sum(sum(class_test_mask <span style="color: #666666">&gt;</span> <span style="color: #40a070">0</span>));
+
+<span style="color: #007020; font-weight: bold">for</span> ii = <span style="color: #40a070">1</span>:num_bands
+    test_data = data(:,:,ii);
+    estimated_data = est_imgs(:,:,ii);
+    
+    tot_correct = <span style="color: #40a070">0</span>;
+    fprintf(<span style="color: #4070a0">&#39;band %d -----\n&#39;</span>,ii);
+    <span style="color: #007020; font-weight: bold">for</span> jj = <span style="color: #40a070">1</span>:num_classes
+        class_est_test = estimated_data(class_test_mask <span style="color: #666666">==</span> jj);
+        num_correct = sum(class_est_test <span style="color: #666666">==</span> jj);
+        tot_correct = tot_correct <span style="color: #666666">+</span> num_correct;
+        fprintf(<span style="color: #4070a0">&#39;for class %d, there was %g percent correctly classifications.\n&#39;</span>, <span style="color: #60a0b0; font-style: italic">...</span>
+                jj, num_correct<span style="color: #666666">/</span><span style="color: #007020">numel</span>(class_est_test <span style="color: #666666">==</span> jj)<span style="color: #666666">*</span><span style="color: #40a070">100</span>);
+    <span style="color: #007020; font-weight: bold">end</span>
+    
+    fprintf(<span style="color: #4070a0">&#39;Total number of correct classifications: %g percent\n&#39;</span>,tot_correct<span style="color: #666666">/</span>tot_test<span style="color: #666666">*</span><span style="color: #40a070">100</span>);
+<span style="color: #007020; font-weight: bold">end</span>
+
+<span style="color: #60a0b0; font-style: italic">% Plot original images and classified images</span>
+
+figure()
+<span style="color: #007020; font-weight: bold">for</span> ii = <span style="color: #40a070">1</span>:num_bands
+    subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">3</span>,ii)
+    imagesc(data(:,:,ii))
+<span style="color: #007020; font-weight: bold">end</span>
+
+figure()
+<span style="color: #007020; font-weight: bold">for</span> ii = <span style="color: #40a070">1</span>:num_bands
+    subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">3</span>,ii)  
+    imagesc(est_imgs(:,:,ii))
+    title(sprintf(<span style="color: #4070a0">&#39;%d&#39;</span>,ii))
+    colormap(parula(num_classes));
+    colorbar(<span style="color: #4070a0">&#39;Ticks&#39;</span>,<span style="color: #40a070">1</span>:<span style="color: #40a070">4</span> );
+<span style="color: #007020; font-weight: bold">end</span>
+
+figure()
+imagesc(class_test_mask)
+</pre></div>
+<p>
+The program is available <a href="https://github.com/krisbhei/IN5520-IN9520/blob/master/6/exercise_class.m" target="_self">here</a> (right click and press "save link as").
+
+<p>
+After the group session, it was found out that it matters a bit how you decide to choose the a priory probability for the final outcome.
+
+<p>
+The results that were obtained from the program assuming an uniform a priory probability between the classes, were
+
+<p>
+<center>  <!-- FIGURE -->
+<hr class="figure">
+<center><p class="caption">Figure 1:  Assuming equal a priory probability for P. </p></center>
+<p><img src="equal_P.svg" align="bottom" width=1400></p>
+</center>
+
+<p>
+
+<!-- code=text typeset with pygments style "friendly" -->
+<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>band 1 -----
+for class 1, there was 24.0602 percent correctly classifications.
+for class 2, there was 64.3059 percent correctly classifications.
+for class 3, there was 83.2239 percent correctly classifications.
+for class 4, there was 69.6573 percent correctly classifications.
+Total number of correct classifications: 61.4108 percent
+band 2 -----
+for class 1, there was 26.1423 percent correctly classifications.
+for class 2, there was 95.6091 percent correctly classifications.
+for class 3, there was 91.6119 percent correctly classifications.
+for class 4, there was 60.5607 percent correctly classifications.
+Total number of correct classifications: 72.963 percent
+band 3 -----
+for class 1, there was 40.9485 percent correctly classifications.
+for class 2, there was 80.949 percent correctly classifications.
+for class 3, there was 92.2183 percent correctly classifications.
+for class 4, there was 64.3614 percent correctly classifications.
+Total number of correct classifications: 71.9184 percent
+band 4 -----
+for class 1, there was 81.9549 percent correctly classifications.
+for class 2, there was 0 percent correctly classifications.
+for class 3, there was 80.5457 percent correctly classifications.
+for class 4, there was 78.3801 percent correctly classifications.
+Total number of correct classifications: 52.4641 percent
+band 5 -----
+for class 1, there was 47.0792 percent correctly classifications.
+for class 2, there was 66.3952 percent correctly classifications.
+for class 3, there was 96.665 percent correctly classifications.
+for class 4, there was 70.5919 percent correctly classifications.
+Total number of correct classifications: 70.4805 percent
+band 6 -----
+for class 1, there was 25.5639 percent correctly classifications.
+for class 2, there was 64.9079 percent correctly classifications.
+for class 3, there was 96.766 percent correctly classifications.
+for class 4, there was 81.433 percent correctly classifications.
+Total number of correct classifications: 67.5556 percent
+</pre></div>
+<p>
+Estimating the a priory probability from the training set gave
+
+<p>
+<center>  <!-- FIGURE -->
+<hr class="figure">
+<center><p class="caption">Figure 2:  Estimating the a priory probability for P. </p></center>
+<p><img src="nonequal_P.svg" align="bottom" width=1400></p>
+</center>
+
+<p>
+
+<!-- code=text typeset with pygments style "friendly" -->
+<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>band 1 -----
+for class 1, there was 48.3516 percent correctly classifications.
+for class 2, there was 64.3059 percent correctly classifications.
+for class 3, there was 83.2239 percent correctly classifications.
+for class 4, there was 48.0997 percent correctly classifications.
+Total number of correct classifications: 62.3203 percent
+band 2 -----
+for class 1, there was 34.7021 percent correctly classifications.
+for class 2, there was 50.5312 percent correctly classifications.
+for class 3, there was 99.1915 percent correctly classifications.
+for class 4, there was 35.5763 percent correctly classifications.
+Total number of correct classifications: 56.0526 percent
+band 3 -----
+for class 1, there was 40.9485 percent correctly classifications.
+for class 2, there was 80.949 percent correctly classifications.
+for class 3, there was 92.2183 percent correctly classifications.
+for class 4, there was 64.3614 percent correctly classifications.
+Total number of correct classifications: 71.9184 percent
+band 4 -----
+for class 1, there was 81.9549 percent correctly classifications.
+for class 2, there was 0 percent correctly classifications.
+for class 3, there was 80.5457 percent correctly classifications.
+for class 4, there was 78.3801 percent correctly classifications.
+Total number of correct classifications: 52.4641 percent
+band 5 -----
+for class 1, there was 58.9936 percent correctly classifications.
+for class 2, there was 66.3952 percent correctly classifications.
+for class 3, there was 96.665 percent correctly classifications.
+for class 4, there was 59.6885 percent correctly classifications.
+Total number of correct classifications: 70.8615 percent
+band 6 -----
+for class 1, there was 46.9636 percent correctly classifications.
+for class 2, there was 64.9079 percent correctly classifications.
+for class 3, there was 96.766 percent correctly classifications.
+for class 4, there was 54.6417 percent correctly classifications.
+Total number of correct classifications: 66.8182 percent
+</pre></div>
+<p>
+It is difficult to give a proper definition of the a priory probability.
+One has to take into account how much you know beforehand of your set.
+As one can see from the results, the percentages differs - for some bands a bit and some band more.
+Estimating the the a priory probability might not give the whole image of your region if one has few samples being the ground truth,
+but assuming equal probability might not be true either.
+
+<h1 id="___sec1" class="anchor">Exercise 2 </h1>
+
+<p>
+
+<!-- code=matlab (!bc mpro) typeset with pygments style "friendly" -->
+<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>close all 
+
+<span style="color: #60a0b0; font-style: italic">% 1.</span>
+mnist_labels=loadmnistlabels(<span style="color: #4070a0">&#39;train-labels.idx1-ubyte&#39;</span>);
+mnist_imgs=loadmnistimages(<span style="color: #4070a0">&#39;train-images.idx3-ubyte&#39;</span>);
+
+<span style="color: #60a0b0; font-style: italic">% 2.</span>
+num_train = <span style="color: #40a070">30000</span>;
+num_valid = <span style="color: #40a070">30000</span>;
+data_sz = <span style="color: #007020">size</span>(mnist_imgs(:,<span style="color: #40a070">1</span>),<span style="color: #40a070">1</span>);
+
+mnist_train_labels = mnist_labels(<span style="color: #40a070">1</span>:num_train,<span style="color: #40a070">1</span>);
+mnist_train_imgs = mnist_imgs(:,<span style="color: #40a070">1</span>:num_train);
+valid_labels = mnist_labels((num_train <span style="color: #666666">+</span> <span style="color: #40a070">1</span>):(num_train <span style="color: #666666">+</span> num_valid),<span style="color: #40a070">1</span>);
+valid_imgs = mnist_imgs(:,(num_train <span style="color: #666666">+</span> <span style="color: #40a070">1</span>):(num_train <span style="color: #666666">+</span> num_valid));
+
+<span style="color: #60a0b0; font-style: italic">% 3. </span>
+figure()
+<span style="color: #007020; font-weight: bold">for</span> <span style="color: #007020">i</span> = <span style="color: #40a070">1</span>:<span style="color: #40a070">10</span> 
+    subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">5</span>,<span style="color: #007020">i</span>)
+    imshow(<span style="color: #007020">reshape</span>(mnist_imgs(:,<span style="color: #007020">i</span>),<span style="color: #40a070">28</span>,<span style="color: #40a070">28</span>),<span style="color: #4070a0">&#39;InitialMagnification&#39;</span>,<span style="color: #4070a0">&#39;fit&#39;</span>)
+<span style="color: #007020; font-weight: bold">end</span>
+
+<span style="color: #60a0b0; font-style: italic">% 4. </span>
+first_pixel = mnist_imgs(<span style="color: #40a070">1</span>,:);
+fprintf(<span style="color: #4070a0">&#39;Variance of the first pixel at every data: %g\n&#39;</span>, var(double(first_pixel)))
+
+<span style="color: #60a0b0; font-style: italic">% 5.</span>
+num_classes = <span style="color: #40a070">10</span>;
+class_means = <span style="color: #007020">zeros</span>(data_sz,num_classes);
+<span style="color: #007020; font-weight: bold">for</span> ii = <span style="color: #40a070">1</span>:num_classes
+    class_means(:,ii) = mean(mnist_train_imgs(:,mnist_train_labels <span style="color: #666666">==</span> ii<span style="color: #666666">-</span><span style="color: #40a070">1</span>),<span style="color: #40a070">2</span>); 
+<span style="color: #007020; font-weight: bold">end</span>
+
+
+estimated_imarr_labels = <span style="color: #007020">zeros</span>(<span style="color: #40a070">1</span>, num_valid);
+<span style="color: #007020; font-weight: bold">for</span> ii = <span style="color: #40a070">1</span>:num_valid
+    [<span style="color: #666666">~</span>, est_class] = min(vecnorm(<span style="color: #007020">bsxfun</span>(@minus, valid_imgs(:,ii), class_means))) ; 
+    estimated_imarr_labels(ii) = est_class<span style="color: #666666">-</span><span style="color: #40a070">1</span>;
+<span style="color: #007020; font-weight: bold">end</span>
+
+fprintf(<span style="color: #4070a0">&#39;percentage of correctly classified samples using mean: %g percent\n&#39;</span>, (sum(estimated_imarr_labels(:) <span style="color: #666666">==</span> valid_labels(:))<span style="color: #666666">/</span>num_valid<span style="color: #666666">*</span><span style="color: #40a070">100</span>) );
+
+sz = <span style="color: #007020">round</span>(<span style="color: #007020">sqrt</span>(data_sz));
+figure()
+<span style="color: #007020; font-weight: bold">for</span> ii = <span style="color: #40a070">1</span>:num_classes
+    subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">5</span>,ii)
+    imagesc(<span style="color: #007020">reshape</span>(class_means(:,ii), sz, sz))
+<span style="color: #007020; font-weight: bold">end</span>
+
+<span style="color: #60a0b0; font-style: italic">% 6.</span>
+rng(<span style="color: #40a070">5520</span>);
+cell_sz = [<span style="color: #40a070">2</span>,<span style="color: #40a070">4</span>,<span style="color: #40a070">8</span>];
+
+num_train_samples = <span style="color: #40a070">5</span>;
+r = randi([<span style="color: #40a070">1</span> num_train],<span style="color: #40a070">1</span>,num_train_samples);
+
+<span style="color: #007020; font-weight: bold">for</span> ii = <span style="color: #40a070">1</span>:<span style="color: #007020">length</span>(cell_sz)
+    
+    c = cell_sz(ii);
+    
+    figure()
+    <span style="color: #007020; font-weight: bold">for</span> jj = <span style="color: #40a070">1</span>:num_train_samples
+        [<span style="color: #666666">~</span>, hogVisualization] = extractHOGFeatures(<span style="color: #007020">reshape</span>(mnist_train_imgs(:,r(jj)), sz, sz), <span style="color: #60a0b0; font-style: italic">...</span>
+                                                   <span style="color: #4070a0">&#39;CellSize&#39;</span>, [c, c]);
+        subplot(<span style="color: #40a070">1</span>,num_train_samples,jj)
+        plot(hogVisualization)
+        title(sprintf(<span style="color: #4070a0">&#39;cell size = %d, img nr. %d&#39;</span>,c,jj))
+    <span style="color: #007020; font-weight: bold">end</span>
+<span style="color: #007020; font-weight: bold">end</span>
+
+figure()
+<span style="color: #007020; font-weight: bold">for</span> ii = <span style="color: #40a070">1</span>:num_train_samples 
+    subplot(<span style="color: #40a070">1</span>,num_train_samples ,ii)
+    imagesc(<span style="color: #007020">reshape</span>(mnist_train_imgs(:,r(ii)), sz, sz))
+    title(sprintf(<span style="color: #4070a0">&#39;image nr. %d&#39;</span>,ii))
+<span style="color: #007020; font-weight: bold">end</span>
+
+<span style="color: #60a0b0; font-style: italic">% 7. </span>
+c = cell_sz(<span style="color: #40a070">1</span>);
+[hogfeatures, hogVisualization] = extractHOGFeatures(<span style="color: #007020">reshape</span>(mnist_train_imgs(:,<span style="color: #40a070">1</span>), sz, sz), <span style="color: #60a0b0; font-style: italic">...</span>
+                                                     <span style="color: #4070a0">&#39;CellSize&#39;</span>, [c, c]);
+
+num_hogfeatures = <span style="color: #007020">length</span>(hogfeatures);
+hogfeatures = <span style="color: #007020">zeros</span>(num_hogfeatures, num_train);
+<span style="color: #007020; font-weight: bold">for</span> ii = <span style="color: #40a070">1</span>:num_train
+    hogfeatures(:,ii) = extractHOGFeatures(<span style="color: #007020">reshape</span>(mnist_train_imgs(:,ii), sz, sz), <span style="color: #60a0b0; font-style: italic">...</span>
+                                           <span style="color: #4070a0">&#39;CellSize&#39;</span>, [c, c]);
+<span style="color: #007020; font-weight: bold">end</span>
+
+
+hogfeatures_means = <span style="color: #007020">zeros</span>(num_hogfeatures,num_classes);
+<span style="color: #007020; font-weight: bold">for</span> ii = <span style="color: #40a070">1</span>:num_classes
+    hogfeatures_means(:,ii) = mean(hogfeatures(:,mnist_train_labels <span style="color: #666666">==</span> ii<span style="color: #666666">-</span><span style="color: #40a070">1</span>),<span style="color: #40a070">2</span>);
+<span style="color: #007020; font-weight: bold">end</span>
+
+estimated_valid_labels_hog = <span style="color: #007020">zeros</span>(<span style="color: #40a070">1</span>, num_valid);
+<span style="color: #007020; font-weight: bold">for</span> ii = <span style="color: #40a070">1</span>:num_valid
+    hogvalid = extractHOGFeatures(<span style="color: #007020">reshape</span>(valid_imgs(:,ii), sz, sz), <span style="color: #60a0b0; font-style: italic">...</span>
+                                                     <span style="color: #4070a0">&#39;CellSize&#39;</span>, [c, c]);
+    [<span style="color: #666666">~</span>, est_class] = min(vecnorm(<span style="color: #007020">bsxfun</span>(@minus,hogvalid.<span style="color: #666666">&#39;</span>,hogfeatures_means))) ; 
+    estimated_valid_labels_hog(ii) = est_class<span style="color: #666666">-</span><span style="color: #40a070">1</span>;
+<span style="color: #007020; font-weight: bold">end</span>
+
+fprintf(<span style="color: #4070a0">&#39;percentage of correctly classified samples using HOG: %g percent\n&#39;</span>, (sum(estimated_valid_labels_hog(:) <span style="color: #666666">==</span> valid_labels(:))<span style="color: #666666">/</span>num_valid<span style="color: #666666">*</span><span style="color: #40a070">100</span>) );
+
+<span style="color: #60a0b0; font-style: italic">% 8.</span>
+imarr = load(<span style="color: #4070a0">&#39;imarr.mat&#39;</span>);
+imarr = imarr.imarr ;
+
+figure()
+<span style="color: #007020; font-weight: bold">for</span> ii=<span style="color: #40a070">1</span>:<span style="color: #40a070">6</span>
+    subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">3</span>,ii);
+    imagesc(<span style="color: #007020">reshape</span>(imarr(ii<span style="color: #666666">*</span><span style="color: #40a070">10</span>,:,:),<span style="color: #40a070">28</span>,<span style="color: #40a070">28</span>))
+    colormap gray
+    title(sprintf(<span style="color: #4070a0">&#39;image nr. %d&#39;</span>, ii<span style="color: #666666">*</span><span style="color: #40a070">10</span>))
+<span style="color: #007020; font-weight: bold">end</span>
+
+<span style="color: #60a0b0; font-style: italic">% 9.</span>
+imarrneg = double(imcomplement(imarr));
+
+
+<span style="color: #60a0b0; font-style: italic">% 10.</span>
+figure()
+<span style="color: #007020; font-weight: bold">for</span> ii=<span style="color: #40a070">1</span>:<span style="color: #40a070">10</span>
+    subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">5</span>,ii);
+    imagesc(<span style="color: #007020">reshape</span>(imarrneg(<span style="color: #40a070">90</span><span style="color: #666666">+</span>ii,:,:),<span style="color: #40a070">28</span>,<span style="color: #40a070">28</span>))
+    colormap gray
+    title(sprintf(<span style="color: #4070a0">&#39;image nr. %d&#39;</span>, <span style="color: #40a070">90</span><span style="color: #666666">+</span>ii))
+<span style="color: #007020; font-weight: bold">end</span>
+
+rng(<span style="color: #40a070">5520</span>);
+
+<span style="color: #60a0b0; font-style: italic">% make label matrix</span>
+labels_num = [<span style="color: #40a070">1</span>:<span style="color: #40a070">9</span> <span style="color: #40a070">0</span>];
+labels = repelem(labels_num,<span style="color: #40a070">10</span>);
+
+imarr_flat = imarrneg(:,:);
+
+<span style="color: #60a0b0; font-style: italic">% make a choice of which samples to use for training </span>
+indices = randperm(<span style="color: #40a070">100</span>);
+
+<span style="color: #60a0b0; font-style: italic">% take num_training out, leave 100-num_training percent</span>
+num_training = <span style="color: #40a070">50</span>;
+num_test = <span style="color: #40a070">100</span> <span style="color: #666666">-</span> num_training;
+
+training_inds = indices(<span style="color: #40a070">1</span>:num_training);
+test_inds = indices((num_training<span style="color: #666666">+</span><span style="color: #40a070">1</span>):<span style="color: #40a070">100</span>);
+
+train_imarr = imarr_flat(training_inds,:); 
+train_imarr_labels = labels(training_inds);
+
+test_imarr = imarr_flat(test_inds,:);
+test_imarr_labels = labels(test_inds);
+
+figure()
+<span style="color: #007020; font-weight: bold">for</span> ii=<span style="color: #40a070">1</span>:<span style="color: #40a070">20</span>
+    subplot(<span style="color: #40a070">4</span>,<span style="color: #40a070">5</span>,ii)
+    imagesc(<span style="color: #007020">reshape</span>(train_imarr(ii,:),<span style="color: #40a070">28</span>,<span style="color: #40a070">28</span>))
+    title(sprintf(<span style="color: #4070a0">&#39;label nr. %d&#39;</span>,train_imarr_labels(ii)))
+<span style="color: #007020; font-weight: bold">end</span>
+
+<span style="color: #60a0b0; font-style: italic">% classify using means of the image pixels</span>
+data_sz = <span style="color: #40a070">28</span><span style="color: #666666">*</span><span style="color: #40a070">28</span>;
+
+num_classes = <span style="color: #40a070">10</span>;
+class_means = <span style="color: #007020">zeros</span>(data_sz,num_classes);
+<span style="color: #007020; font-weight: bold">for</span> ii = <span style="color: #40a070">1</span>:num_classes
+    class_means(:,ii) = mean(train_imarr(train_imarr_labels <span style="color: #666666">==</span> labels_num(ii),:),<span style="color: #40a070">1</span>); 
+<span style="color: #007020; font-weight: bold">end</span>
+
+figure()
+<span style="color: #007020; font-weight: bold">for</span> ii=<span style="color: #40a070">1</span>:num_classes
+    subplot(<span style="color: #40a070">2</span>,<span style="color: #40a070">5</span>,ii)
+    imagesc(<span style="color: #007020">reshape</span>(class_means(:,ii),<span style="color: #40a070">28</span>,<span style="color: #40a070">28</span>))
+    title(sprintf(<span style="color: #4070a0">&#39;%d&#39;</span>,labels_num(ii)))
+<span style="color: #007020; font-weight: bold">end</span>
+
+estimated_imarr_labels = <span style="color: #007020">zeros</span>(<span style="color: #40a070">1</span>, num_test);
+<span style="color: #007020; font-weight: bold">for</span> ii = <span style="color: #40a070">1</span>:num_test
+    [<span style="color: #666666">~</span>, est_class] = min(vecnorm(<span style="color: #007020">bsxfun</span>(@minus, test_imarr(ii,:).<span style="color: #666666">&#39;</span>, class_means))) ; 
+    estimated_imarr_labels(ii) = labels_num(est_class);
+<span style="color: #007020; font-weight: bold">end</span>
+
+fprintf(<span style="color: #4070a0">&#39;percentage of correctly classified imarr samples using mean: %g percent\n&#39;</span>, (sum(estimated_imarr_labels(:) <span style="color: #666666">==</span> test_imarr_labels(:))<span style="color: #666666">/</span>num_test<span style="color: #666666">*</span><span style="color: #40a070">100</span>) );
+
+<span style="color: #60a0b0; font-style: italic">% classify using hog</span>
+sz = <span style="color: #40a070">28</span>;
+
+c = <span style="color: #40a070">4</span>;
+[hogfeatures, hogVisualization] = extractHOGFeatures(<span style="color: #007020">reshape</span>(train_imarr(<span style="color: #40a070">1</span>,:), sz, sz), <span style="color: #60a0b0; font-style: italic">...</span>
+                                                     <span style="color: #4070a0">&#39;CellSize&#39;</span>, [c, c]);
+
+num_hogfeatures = <span style="color: #007020">length</span>(hogfeatures);
+hogfeatures = <span style="color: #007020">zeros</span>(num_hogfeatures, num_training);
+<span style="color: #007020; font-weight: bold">for</span> ii = <span style="color: #40a070">1</span>:num_training
+    hogfeatures(:,ii) = extractHOGFeatures(<span style="color: #007020">reshape</span>(train_imarr(ii,:), sz, sz), <span style="color: #60a0b0; font-style: italic">...</span>
+                                           <span style="color: #4070a0">&#39;CellSize&#39;</span>, [c, c]);
+<span style="color: #007020; font-weight: bold">end</span>
+
+
+hogfeatures_means = <span style="color: #007020">zeros</span>(num_hogfeatures,num_classes);
+<span style="color: #007020; font-weight: bold">for</span> ii = <span style="color: #40a070">1</span>:num_classes
+    hogfeatures_means(:,ii) = mean(hogfeatures(:,train_imarr_labels <span style="color: #666666">==</span> labels_num(ii)),<span style="color: #40a070">2</span>);
+<span style="color: #007020; font-weight: bold">end</span>
+
+estimated_imarr_labels_hog = <span style="color: #007020">zeros</span>(<span style="color: #40a070">1</span>, num_test);
+<span style="color: #007020; font-weight: bold">for</span> ii = <span style="color: #40a070">1</span>:num_test
+    hogvalid = extractHOGFeatures(<span style="color: #007020">reshape</span>(test_imarr(ii,:), sz, sz), <span style="color: #60a0b0; font-style: italic">...</span>
+                                                     <span style="color: #4070a0">&#39;CellSize&#39;</span>, [c, c]);
+    [<span style="color: #666666">~</span>, est_class] = min(vecnorm(<span style="color: #007020">bsxfun</span>(@minus,hogvalid.<span style="color: #666666">&#39;</span>,hogfeatures_means))) ; 
+    estimated_imarr_labels_hog(ii) = labels_num(est_class);
+<span style="color: #007020; font-weight: bold">end</span>
+
+fprintf(<span style="color: #4070a0">&#39;percentage of correctly classified imarr samples using HOG: %g percent\n&#39;</span>, (sum(estimated_imarr_labels_hog(:) <span style="color: #666666">==</span> test_imarr_labels(:))<span style="color: #666666">/</span>num_test<span style="color: #666666">*</span><span style="color: #40a070">100</span>) );
+
+<span style="color: #60a0b0; font-style: italic">% 10</span>
+Mdl = fitcknn(train_imarr,train_imarr_labels.<span style="color: #666666">&#39;</span>,<span style="color: #4070a0">&#39;NumNeighbors&#39;</span>,<span style="color: #40a070">3</span>,<span style="color: #4070a0">&#39;Standardize&#39;</span>,<span style="color: #40a070">0</span>);
+knnlabel = predict(Mdl,test_imarr);
+
+fprintf(<span style="color: #4070a0">&#39;percentage of correctly classified imarr samples using knn: %g percent\n&#39;</span>, sum(knnlabel.<span style="color: #666666">&#39;</span> <span style="color: #666666">==</span> test_imarr_labels)<span style="color: #666666">/</span>num_test<span style="color: #666666">*</span><span style="color: #40a070">100</span>)
+</pre></div>
+<p>
+The program is available <a href="https://github.com/krisbhei/IN5520-IN9520/blob/master/6/exercise_HOG.m" target="_self">here</a> (right click and press "save link as").
+
+<p>
+The results from this program are
+
+<p>
+
+<!-- code=text typeset with pygments style "friendly" -->
+<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>percentage of correctly classified samples using mean: 81.1633 percent
+percentage of correctly classified samples using HOG: 91.4933 percent
+percentage of correctly classified imarr samples using mean: 30 percent
+percentage of correctly classified imarr samples using HOG: 64 percent
+percentage of correctly classified imarr samples using knn: 30 percent
+</pre></div>
+<p>
+
+<!-- ------------------- end of main content --------------- -->
+
+</div>  <!-- end container -->
+<!-- include javascript, jQuery *first* -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+<!-- Bootstrap footer
+<footer>
+<a href="http://..."><img width="250" align=right src="http://..."></a>
+</footer>
+-->
+
+
+<center style="font-size:80%">
+<!-- copyright -->  Made with <a href="https://github.com/hplgit/doconce">DocOnce</a>
+</center>
+
+
+</body>
+</html>
+    
+
